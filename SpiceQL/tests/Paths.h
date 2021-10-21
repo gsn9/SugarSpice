@@ -93,3 +93,29 @@ std::vector<std::string> galileo_paths = {
 
     "/isis_data/galileo/kernels/pck/pck00010_msgr_v23_europa2020.tpc"
 };
+
+
+// paths for lro
+std::vector<std::string> lro_paths={
+    "/isis_data/lro/kernels/spk/fdf29_1234567_1234567_123.bsp",
+    "/isis_data/lro/kernels/spk/fdf29r_1234512_1234512_321.bsp",
+    "/isis_data/lro/kernels/spk/LRO_*_GRGM660*.bsp",
+    "/isis_data/lro/kernels/spk/LRO_*_GRGM900C*.BSP",
+
+    "/isis_data/lro/kernels/sclk/lro_clkcor_1234567_v00.tsc",
+
+    "/isis_data/lro/kernels/pck/pck12345.tpc",
+    "/isis_data/lro/kernels/pck/moon_080317.tf",
+    "/isis_data/lro/kernels/pck/moon_assoc_me.tf",
+
+    "/isis_data/lro/kernels/tspk/moon_pa_de421_1900-2050.bpc",
+    "/isis_data/lro/kernels/tspk/de421.bsp",
+
+    "/isis_data/lro/kernels/ck/lroc_kernels.1234.db",
+    "/isis_data/lro/kernels/ck/moc_kernels.1234.db",
+
+    "/isis_data/lro/kernels/iak/lro_instrumentAddendum_v82.ti",
+    "/isis_data/lro/kernels/ik/lro_instruments_v77.ti",
+    "/isis_data/lro/kernels/ik/lro_lroc_v69.ti",
+    "/isis_data/lro/kernels/iak/mrflroAddendum333.ti"
+};
