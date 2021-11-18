@@ -59,6 +59,7 @@ void KernelDataDirectories::SetUp() {
   paths.insert(paths.end(), lro_paths.begin(), lro_paths.end());
   paths.insert(paths.end(), apollo16_paths.begin(), apollo16_paths.end());
   paths.insert(paths.end(), juno_paths.begin(), juno_paths.end());
+  paths.insert(paths.end(), viking1_paths.begin(), viking1_paths.end());
 }
 
 

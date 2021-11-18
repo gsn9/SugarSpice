@@ -348,3 +348,23 @@ TEST_F(IsisDataDirectory, MroConfTest) {
     EXPECT_TRUE(it != kernelToCheck.end());
   }
 }
+
+TEST_F(KernelDataDirectories, FunctionalTestSearchMissionKernelsViking1) {
+  fs::path dbPath = getMissionConfigFile("viking1");
+
+  ifstream i(dbPath);
+  nlohmann::json conf;
+  i >> conf;
+
+  MockRepository mocks;
+  mocks.OnCallFunc(ls).Return(paths);
+
+  nlohmann::json res = searchMissionKernels("/isis_data/", conf);
+
+  EXPECT_EQ(res["viking1"]["ck"]["reconstructed"]["kernels"].size(), 1);
+  EXPECT_EQ(res["viking1"]["ck"]["smithed"]["kernels"].size(), 1);
+  EXPECT_EQ(res["viking1"]["fk"]["kernels"].size(), 1);
+  EXPECT_EQ(res["viking1"]["iak"]["kernels"].size(), 1);
+  EXPECT_EQ(res["viking1"]["sclk"]["kernels"].size(), 2);
+  EXPECT_EQ(res["viking1"]["spk"]["reconstructed"]["kernels"].size(), 1);
+}

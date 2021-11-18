@@ -248,3 +248,13 @@ std::vector<std::string> juno_paths = {
     "/isis_data/juno/kernels/pck/pck00010.tpc"
 };
 
+// paths for viking1
+std::vector<std::string> viking1_paths = {
+    "/isis_data/viking1/kernels/ck/vo1_sedr.bc",
+    "/isis_data/viking1/kernels/ck/o1_mdim2.0_rand.bc",
+    "/isis_data/viking1/kernels/fk/vol1_v12.tf",
+    "/isis_data/viking1/kernels/iak/vikingAddendum123.ti",
+    "/isis_data/viking1/kernels/sclk/vo1_fict.tsc",
+    "/isis_data/viking1/kernels/sclk/vo1_fsc.tsc",
+    "isis_data/viking1/kernels/spk/v*[tabm].bsp"
+};
