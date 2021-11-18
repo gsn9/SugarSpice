@@ -361,10 +361,11 @@ TEST_F(KernelDataDirectories, FunctionalTestSearchMissionKernelsViking1) {
 
   nlohmann::json res = searchMissionKernels("/isis_data/", conf);
 
+  cout << res <<endl;
   EXPECT_EQ(res["viking1"]["ck"]["reconstructed"]["kernels"].size(), 1);
   EXPECT_EQ(res["viking1"]["ck"]["smithed"]["kernels"].size(), 1);
   EXPECT_EQ(res["viking1"]["fk"]["kernels"].size(), 1);
   EXPECT_EQ(res["viking1"]["iak"]["kernels"].size(), 1);
   EXPECT_EQ(res["viking1"]["sclk"]["kernels"].size(), 2);
-  EXPECT_EQ(res["viking1"]["spk"]["reconstructed"]["kernels"].size(), 1);
+  EXPECT_EQ(res["viking1"]["spk"]["reconstructed"]["kernels"].size(), 2);
 }
