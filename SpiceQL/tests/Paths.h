@@ -256,5 +256,5 @@ std::vector<std::string> viking1_paths = {
     "/isis_data/viking1/kernels/iak/vikingAddendum123.ti",
     "/isis_data/viking1/kernels/sclk/vo1_fict.tsc",
     "/isis_data/viking1/kernels/sclk/vo1_fsc.tsc",
-    "isis_data/viking1/kernels/spk/v*[tabm].bsp"
+    "isis_data/viking1/kernels/spk/v01_sedr.bsp"
 };
