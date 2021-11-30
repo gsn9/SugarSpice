@@ -387,3 +387,27 @@ TEST_F(KernelDataDirectories, FunctionalTestSearchMissionKernelsViking2) {
   EXPECT_EQ(res["viking2"]["sclk"]["kernels"].size(), 2);
   EXPECT_EQ(res["viking2"]["spk"]["reconstructed"]["kernels"].size(), 3);
 }
+
+// test's for odyssey config
+TEST_F(KernelDataDirectories, FunctionalTestSearchMissionKernelsOdyssey) {
+  fs::path dbPath = getMissionConfigFile("odyssey");
+
+  ifstream i(dbPath);
+  nlohmann::json conf;
+  i >> conf;
+
+  MockRepository mocks;
+  mocks.OnCallFunc(ls).Return(paths);
+
+  nlohmann::json res = searchMissionKernels("/isis_data/", conf);
+
+  cout << res <<endl;
+  EXPECT_EQ(res["odyssey"]["ck"]["reconstructed"]["kernels"].size(), 11);
+  EXPECT_EQ(res["odyssey"]["ck"]["smithed"]["kernels"].size(), 1);
+  EXPECT_EQ(res["odyssey"]["fk"]["kernels"].size(), 2);
+  EXPECT_EQ(res["odyssey"]["iak"]["kernels"].size(), 1);
+  EXPECT_EQ(res["odyssey"]["sclk"]["kernels"].size(), 1); 
+  EXPECT_EQ(res["odyssey"]["spk"]["predicted"]["kernels"].size(), 1);
+  EXPECT_EQ(res["odyssey"]["spk"]["smithed"]["kernels"].size(), 1);
+  EXPECT_EQ(res["odyssey"]["spk"]["reconstructed"]["kernels"].size(), 7);
+}
