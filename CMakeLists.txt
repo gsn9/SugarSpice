@@ -41,18 +41,21 @@ if(SPICEQL_BUILD_LIB)
   set(SPICEQL_SRC_FILES ${CMAKE_CURRENT_SOURCE_DIR}/SpiceQL/src/utils.cpp
                           ${CMAKE_CURRENT_SOURCE_DIR}/SpiceQL/src/io.cpp
                           ${CMAKE_CURRENT_SOURCE_DIR}/SpiceQL/src/query.cpp
-                          ${CMAKE_CURRENT_SOURCE_DIR}/SpiceQL/src/spice_types.cpp)
+                          ${CMAKE_CURRENT_SOURCE_DIR}/SpiceQL/src/spice_types.cpp
+                          ${CMAKE_CURRENT_SOURCE_DIR}/SpiceQL/src/config.cpp)
 
   set(SPICEQL_HEADER_FILES ${SPICEQL_BUILD_INCLUDE_DIR}/sugar_spice.h
                               ${SPICEQL_BUILD_INCLUDE_DIR}/utils.h
                               ${SPICEQL_BUILD_INCLUDE_DIR}/io.h
                               ${SPICEQL_BUILD_INCLUDE_DIR}/spice_types.h
-                              ${SPICEQL_BUILD_INCLUDE_DIR}/query.h)
+                              ${SPICEQL_BUILD_INCLUDE_DIR}/query.h
+                            ${SPICEQL_BUILD_INCLUDE_DIR}/config.h)
 
   set(SPICEQL_CONFIG_FILES ${CMAKE_CURRENT_SOURCE_DIR}/SpiceQL/db/clem1.json
                               ${CMAKE_CURRENT_SOURCE_DIR}/SpiceQL/db/galileo.json
                               ${CMAKE_CURRENT_SOURCE_DIR}/SpiceQL/db/lro.json
-                              ${CMAKE_CURRENT_SOURCE_DIR}/SpiceQL/db/mess.json)
+                              ${CMAKE_CURRENT_SOURCE_DIR}/SpiceQL/db/mess.json
+                              ${CMAKE_CURRENT_SOURCE_DIR}/SpiceQL/db/juno.json)
 
   add_library(SpiceQL SHARED ${SPICEQL_SRC_FILES})
 

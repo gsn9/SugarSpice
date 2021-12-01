@@ -77,6 +77,14 @@ namespace SpiceQL {
   }
 
 
+  vector<string> getPathsFromRegex (string root, json r) {
+      vector<string> regexes = jsonArrayToVector(r);
+      regex reg(fmt::format("({})", fmt::join(regexes, "|")));
+      vector<string> paths = glob(root, reg, true);
+
+      return paths;
+  }
+
   json mergeConfigs(json baseConfig, json mergingConfig) {
     for (json::iterator it = mergingConfig.begin(); it != mergingConfig.end(); ++it) {
       if (baseConfig.contains(it.key())) {
@@ -604,4 +612,3 @@ namespace SpiceQL {
   }
 
 }
-

@@ -13,7 +13,7 @@ using namespace SpiceQL;
 
 
 TEST_F(LroKernelSet, FunctionalTestSearchMissionKernels) {
-  setenv("SPICEROOT", tempDir.c_str(), true);
+  setenv("SPICEROOT", root.c_str(), true);
 
   // load all available kernels
   nlohmann::json kernels = searchMissionKernels(root, conf);

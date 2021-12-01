@@ -23,44 +23,44 @@ namespace SpiceQL {
 
 
  std::string getKernelStringValue(std::string key) {
-   // check to make sure the key exists when calling findKeyWords(key) 
+   // check to make sure the key exists when calling findKeyWords(key)
    if (findKeywords(key).contains(key)){
       json results = findKeywords(key);
       return results[key] ;
     }
-    // throw exception 
+    // throw exception
     else{
       throw std::invalid_argument("key not in results");
     }
   }
- 
+
   std::vector<string> getKernelVectorValue(std::string key) {
-    
-    // check to make sure the key exists when calling findKeyWords(key) 
+
+    // check to make sure the key exists when calling findKeyWords(key)
     if (findKeywords(key).contains(key)){
 
-      // get json results of key 
+      // get json results of key
       json results = findKeywords(key);
-      vector<string> kernelValues;    
+      vector<string> kernelValues;
 
       // iterate over results @ key
       for(auto i : results[key]){
-        // push values to vector 
+        // push values to vector
         kernelValues.push_back(to_string(i));
       }
       return kernelValues;
     }
-    // throw exception 
+    // throw exception
     else{
       throw std::invalid_argument("key not in results");
     }
   }
 
-  
+
 
   string getLatestKernel(vector<string> kernels) {
     if(kernels.empty()) {
-      throw invalid_argument("Can't get latest kernel from empty vector");  
+      throw invalid_argument("Can't get latest kernel from empty vector");
     }
 
     string extension = static_cast<fs::path>(kernels.at(0)).extension();
@@ -84,7 +84,7 @@ namespace SpiceQL {
             if(!kernels[p].contains(qual)){
               continue;
             }
- 
+
             std::vector<string> l = jsonArrayToVector(kernels[p][qual]["kernels"]);
             fs::path latest;
 
@@ -111,7 +111,7 @@ namespace SpiceQL {
       }
 
       vector<string> k = jsonArrayToVector(kernels[p]);
-      if(!k.empty()) { 
+      if(!k.empty()) {
         fs::path latest = getLatestKernel(k);
         kernels[p] = latest;
       }
@@ -119,25 +119,6 @@ namespace SpiceQL {
 
     return kernels;
   }
-
-  /**
-    * @brief glob, but with json
-    *
-    * Lambda for globbing files from a regular expression stored
-    * in json. As they can be a single expression or a
-    * list, we need to massage the json a little.
-    *
-    * @param root root path to search
-    * @param r json list of regexes
-    * @returns vector of paths
-   **/
-  vector<string> getPathsFromRegex (string root, json r) {
-      vector<string> regexes = jsonArrayToVector(r);
-      regex reg(fmt::format("({})", fmt::join(regexes, "|")));
-      vector<string> paths = glob(root, reg, true);
-
-      return paths;
-  };
 
 
   json globKernels(string root, json conf, string kernelType) {

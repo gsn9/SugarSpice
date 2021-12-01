@@ -11,6 +11,7 @@ find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
 
 # Setup for wrapper library
 set(PYSPICEQL_SOURCES pyspiceql.i
+                      config.i
                       io.i
                       query.i
                       spice_types.i

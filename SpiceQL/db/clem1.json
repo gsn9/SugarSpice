@@ -33,29 +33,11 @@
     },
     "iak" : {
       "kernels" : "uvvisAddendum[0-9]{3}.ti"
-    },
-    "ck" : {
-      "deps" : {
-        "objs" : ["/clem1/sclk", "/base/lsk"]
-      }
-    },
-    "spk" : {
-      "deps" : {
-        "objs" : ["/clem/spk"]
-      }
     }
   },
   "nir" : {
-    "iak" : "nirAddendum[0-9]{3}.ti",
-    "ck" : {
-      "deps" : {
-        "objs" : ["/base/lsk", "/clem1/sclk"]
-      }
-    },
-    "spk" : {
-      "deps" : {
-        "objs" : ["/clem/spk"]
-      }
+    "iak" : {
+      "kernels" : "nirAddendum[0-9]{3}.ti"
     }
   }
 }

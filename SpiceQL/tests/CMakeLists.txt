@@ -9,7 +9,8 @@ set (SPICEQL_TEST_SOURCE ${SPICEQL_TEST_DIRECTORY}/Fixtures.cpp
                             ${SPICEQL_TEST_DIRECTORY}/QueryTests.cpp
                             ${SPICEQL_TEST_DIRECTORY}/IoTests.cpp
                             ${SPICEQL_TEST_DIRECTORY}/KernelTests.cpp
-                            ${SPICEQL_TEST_DIRECTORY}/FunctionalTestsSpiceQueries.cpp)
+                            ${SPICEQL_TEST_DIRECTORY}/FunctionalTestsSpiceQueries.cpp
+                            ${SPICEQL_TEST_DIRECTORY}/FunctionalTestsConfig.cpp)
 
 # setup test executable
 add_executable(runSpiceQLTests TestMain.cpp ${SPICEQL_TEST_SOURCE})

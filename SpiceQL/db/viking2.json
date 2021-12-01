@@ -2,7 +2,7 @@
     "viking2": {
         "ck":{
             "reconstructed":{
-                "kernels": "vo2_sedr_kck2.bc"
+                "kernels": "vo2_sedr_ck2.bc"
             },
             "smithed":{
                 "kernels": "vo2[a-b]Type3Csmithed.bc"
@@ -19,7 +19,7 @@
         },
         "spk":{
             "reconstructed" : {
-                "kernels" : ["viking2[a-b].bsp", "vo2_recon.bsp", "vo2_sedr.bsp"]
+                "kernels" : ["viking2[a-b].bsp", "vo2_rcon.bsp", "vo2_sedr.bsp"]
             }
         }
     }

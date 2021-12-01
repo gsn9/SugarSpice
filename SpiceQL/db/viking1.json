@@ -2,14 +2,14 @@
     "viking1": {
         "ck": {
             "reconstructed":{
-                "kernels": "vo1_sedr.bc"
+                "kernels": "vo1_sedr_ck2.bc"
             },
             "smithed": {
                 "kernels": "vo1_mdim2.0_rand.bc"
             }
         },
         "fk": {
-            "kernels" : "vol1_v[0-9]{2}.tf"
+            "kernels" : "vo1_v[0-9]{2}.tf"
         },
         "iak": {
             "kernels": "vikingAddendum[0-9]{3}.ti"
@@ -19,7 +19,7 @@
         },
         "spk": {
             "reconstructed": {
-                "kernels": "v*[tabm].bsp"
+                "kernels": ["vo1_ext_gem.bsp", "vo1_sedr.bsp", "viking1[a-b].bsp", "vo1_rcon.bsp"]
             }
         }
     }
