@@ -190,15 +190,20 @@ TEST_F(KernelDataDirectories, FunctionalTestSearchMissionKernelsCassini) {
 
   ASSERT_EQ(res["cassini"]["ck"]["reconstructed"]["kernels"].size(), 2);
   ASSERT_EQ(res["cassini"]["ck"]["smithed"]["kernels"].size(), 3);
+
+
+
   ASSERT_EQ(res["cassini"]["fk"]["kernels"].size(), 2);
+
   ASSERT_EQ(res["cassini"]["iak"]["kernels"].size(), 3);
+
+  
   ASSERT_EQ(res["cassini"]["pck"]["deps"].size(), 1);
   ASSERT_EQ(res["cassini"]["pck"]["kernels"].size(), 3);
   ASSERT_EQ(res["cassini"]["pck"]["smithed"]["kernels"].size(), 1);
   ASSERT_EQ(res["cassini"]["sclk"]["kernels"].size(), 1);
   ASSERT_EQ(res["cassini"]["spk"]["kernels"].size(), 3);
 }
-
 
 TEST_F(KernelDataDirectories, FunctionalTestSearchMissionKernelsApollo16) {
   fs::path dbPath = getMissionConfigFile("apollo16");
@@ -221,86 +226,100 @@ TEST_F(KernelDataDirectories, FunctionalTestSearchMissionKernelsApollo16) {
   ASSERT_EQ(res["apollo_pan"]["iak"]["kernels"].size(), 2);
 }
 
-
 // test for apollo 17 kernels 
-TEST_F(IsisDataDirectory, FunctionalTestApollo17Conf) {
+TEST_F(KernelDataDirectories, FunctionalTestSearchMissionKernelsApollo17) {
   fs::path dbPath = getMissionConfigFile("apollo17");
 
+
+  ifstream i(dbPath);
+  nlohmann::json conf;
+  i >> conf;
+
+  MockRepository mocks;
+  mocks.OnCallFunc(ls).Return(paths);
+
+  nlohmann::json res = searchMissionKernels("/isis_data/", conf);
+
+
+  ASSERT_EQ(res["apollo17"]["ck"]["reconstructed"]["kernels"].size(), 4);
+  ASSERT_EQ(res["apollo17"]["sclk"]["kernels"].size(), 1);
+  ASSERT_EQ(res["apollo17"]["fk"]["kernels"].size(), 2);
+  ASSERT_EQ(res["apollo17"]["spk"]["reconstructed"]["kernels"].size(), 4);
+  ASSERT_EQ(res["METRIC"]["iak"]["kernels"].size(), 1);
+  ASSERT_EQ(res["PANORAMIC"]["ik"]["kernels"].size(), 3);
+  ASSERT_EQ(res["APOLLO_PAN"]["iak"]["kernels"].size(), 2);
+}
+
+TEST_F(KernelDataDirectories, FunctionalTestSearchMissionKernelsLROC) {
+  nlohmann::json conf = getInstrumentConfig("lroc");
+
+  MockRepository mocks;
+  mocks.OnCallFunc(ls).Return(paths);
+
+  nlohmann::json res = searchMissionKernels("/isis_data/", conf);
+
+  EXPECT_EQ(res["ck"]["reconstructed"]["kernels"].size(), 16);
+  EXPECT_EQ(res["spk"]["reconstructed"]["kernels"].size(), 8);
+  EXPECT_EQ(res["spk"]["smithed"]["kernels"].size(), 14);
+  EXPECT_EQ(res["iak"]["kernels"].size(), 2);
+  EXPECT_EQ(res["ik"]["kernels"].size(), 2);
+  EXPECT_EQ(res["pck"]["kernels"].size(), 2);
+  EXPECT_EQ(res["fk"]["kernels"].size(), 2);
+  EXPECT_EQ(res["tspk"]["kernels"].size(), 2);
+}
+
+
+TEST_F(KernelDataDirectories, FunctionalTestSearchMissionKernelsJuno) {
+  fs::path dbPath = getMissionConfigFile("jno");
+
+  string base = "/isis_data/juno";
+  regex base_reg(fmt::format("({})", fmt::join(base, "")));
+  vector<string> paths_with_base;
+
+  for (auto path: paths) {
+    if (regex_search(path, base_reg)) {
+      paths_with_base.push_back(path);
+    }
+  }
+
+  ifstream i(dbPath);
+  nlohmann::json conf;
+  i >> conf;
+
+  MockRepository mocks;
+  mocks.OnCallFunc(ls).Return(paths_with_base);
+
+  nlohmann::json res = searchMissionKernels(base, conf);
+
+  ASSERT_EQ(res["juno"]["ck"]["reconstructed"]["kernels"].size(), 4); 
+  ASSERT_EQ(res["juno"]["ck"]["deps"]["objs"].size(), 2); 
+  ASSERT_EQ(res["juno"]["spk"]["reconstructed"]["kernels"].size(), 2); 
+  ASSERT_EQ(res["juno"]["spk"]["deps"]["objs"].size(), 1); 
+  ASSERT_EQ(res["juno"]["sclk"]["kernels"].size(), 1);  
+  ASSERT_EQ(res["juno"]["tspk"]["kernels"].size(), 3);  
+  ASSERT_EQ(res["juno"]["fk"]["kernels"].size(), 1); 
+  ASSERT_EQ(res["juno"]["ik"]["kernels"].size(), 1);  
+  ASSERT_EQ(res["juno"]["iak"]["kernels"].size(), 1);  
+  ASSERT_EQ(res["juno"]["pck"]["na"]["kernels"].size(), 1); 
+} 
+
+
+TEST_F(IsisDataDirectory, MroConfTest) {
+  fs::path dbPath = getMissionConfigFile("mro");
+  
   ifstream i(dbPath);
   nlohmann::json conf = nlohmann::json::parse(i);
 
   MockRepository mocks;
   mocks.OnCallFunc(ls).Return(files);
-  
+
   nlohmann::json res = searchMissionKernels("doesn't matter", conf);
 
   set<string> kernels = getKernelSet(res);
-  set<string> expectedKernels = missionMap.at("apollo17");
-  set<string> diff; 
+  set<string> mission = missionMap.at("mro");
   
-  set_difference(expectedKernels.begin(), expectedKernels.end(), kernels.begin(), kernels.end(), inserter(diff, diff.begin()));
+  EXPECT_EQ(kernels, mission); 
   
-  if (diff.size() != 0) {
-    FAIL() << "Kernel sets are not equal, diff: " << fmt::format("{}", fmt::join(diff, " ")) << endl;
-  }
-}
-
-
-TEST_F(IsisDataDirectory, FunctionalTestLroConf) {
-  compareKernelSets("lro");
-
-  nlohmann::json conf = getMissionConfig("lro");
-  MockRepository mocks;
-  mocks.OnCallFunc(ls).Return(files);
-  
-  nlohmann::json res = searchMissionKernels("doesn't matter", conf);
-
-  // check a kernel from each regex exists in their quality groups
-  vector<string> kernelToCheck =  jsonArrayToVector(res.at("moc").at("ck").at("reconstructed").at("kernels"));
-  vector<string> expected = {"moc42r_2016305_2016336_v01.bc"};
-  
-  for (auto &e : expected) { 
-    auto it = find(kernelToCheck.begin(), kernelToCheck.end(), e);
-    if (it == kernelToCheck.end()) {
-      FAIL() << e << " was not found in the kernel results";
-    }
-  }
-  
-  kernelToCheck = getKernelList(res.at("moc").at("spk").at("reconstructed")); 
-  expected = {"fdf29r_2018305_2018335_v01.bsp", "fdf29_2021327_2021328_b01.bsp"};
-  for (auto &e : expected) { 
-    auto it = find(kernelToCheck.begin(), kernelToCheck.end(), e);
-    if (it == kernelToCheck.end()) {
-      FAIL() << e << " was not found in the kernel results";
-    }
-  }
-
-
-  kernelToCheck = getKernelList(res.at("moc").at("spk").at("smithed")); 
-  expected = {"LRO_ES_05_201308_GRGM660PRIMAT270.bsp", "LRO_ES_16_201406_GRGM900C_L600.BSP"};
-  for (auto &e : expected) { 
-    auto it = find(kernelToCheck.begin(), kernelToCheck.end(), e);
-    if (it == kernelToCheck.end()) {
-      FAIL() << e << " was not found in the kernel results";
-    }
-  }
-}
-
-
-TEST_F(IsisDataDirectory, FunctionalTestJunoConf) {
-  compareKernelSets("juno");
-} 
-
-
-TEST_F(IsisDataDirectory, FunctionalTestMroConf) {
-  compareKernelSets("mro");
-
-  nlohmann::json conf = getMissionConfig("mro");
-  MockRepository mocks;
-  mocks.OnCallFunc(ls).Return(files);
-  
-  nlohmann::json res = searchMissionKernels("doesn't matter", conf);
-
   // check a kernel from each regex exists in there quality groups
   vector<string> kernelToCheck =  jsonArrayToVector(res.at("mro").at("spk").at("reconstructed").at("kernels"));
   vector<string> expected = {"mro_cruise.bsp", "mro_ab.bsp", "mro_psp_rec.bsp", 
@@ -325,13 +344,118 @@ TEST_F(IsisDataDirectory, FunctionalTestMroConf) {
   }
 }
 
+//test's for viking1 config 
+TEST_F(KernelDataDirectories, FunctionalTestSearchMissionKernelsViking1) {
+  fs::path dbPath = getMissionConfigFile("viking1");
 
-TEST_F(IsisDataDirectory, FunctionalTestViking1Conf) {
-  compareKernelSets("viking1");
-  // skip specific tests since viking images are mostly literals and without mixed qualities
+  ifstream i(dbPath);
+  nlohmann::json conf;
+  i >> conf;
+
+  MockRepository mocks;
+  mocks.OnCallFunc(ls).Return(paths);
+
+  nlohmann::json res = searchMissionKernels("/isis_data/", conf);
+
+  cout << res <<endl;
+  EXPECT_EQ(res["viking1"]["ck"]["reconstructed"]["kernels"].size(), 1);
+  EXPECT_EQ(res["viking1"]["ck"]["smithed"]["kernels"].size(), 1);
+  EXPECT_EQ(res["viking1"]["fk"]["kernels"].size(), 1);
+  EXPECT_EQ(res["viking1"]["iak"]["kernels"].size(), 2);
+  EXPECT_EQ(res["viking1"]["sclk"]["kernels"].size(), 2);
+  EXPECT_EQ(res["viking1"]["spk"]["reconstructed"]["kernels"].size(), 3);
+}
+
+// test's for viking2 config
+TEST_F(KernelDataDirectories, FunctionalTestSearchMissionKernelsViking2) {
+  fs::path dbPath = getMissionConfigFile("viking2");
+
+  ifstream i(dbPath);
+  nlohmann::json conf;
+  i >> conf;
+
+  MockRepository mocks;
+  mocks.OnCallFunc(ls).Return(paths);
+
+  nlohmann::json res = searchMissionKernels("/isis_data/", conf);
+
+  cout << res <<endl;
+  EXPECT_EQ(res["viking2"]["ck"]["reconstructed"]["kernels"].size(), 1);
+  EXPECT_EQ(res["viking2"]["ck"]["smithed"]["kernels"].size(), 1);
+  EXPECT_EQ(res["viking2"]["fk"]["kernels"].size(), 1);
+  EXPECT_EQ(res["viking2"]["iak"]["kernels"].size(), 2);
+  EXPECT_EQ(res["viking2"]["sclk"]["kernels"].size(), 2);
+  EXPECT_EQ(res["viking2"]["spk"]["reconstructed"]["kernels"].size(), 3);
 }
 
 
-TEST_F(IsisDataDirectory, FunctionalTestViking2Conf) {
-  compareKernelSets("viking2");
+
+TEST_F(IsisDataDirectory, FunctionalTestMgsConf) {
+  
+  fs::path dbPath = getMissionConfigFile("mgs");
+  
+  compareKernelSets("mgs");
+
+  ifstream i(dbPath);
+  nlohmann::json conf = nlohmann::json::parse(i);
+
+  MockRepository mocks;
+  mocks.OnCallFunc(ls).Return(files);
+
+  nlohmann::json res = searchMissionKernels("doesn't matter", conf);
+
+  set<string> kernels = getKernelSet(res);
+  set<string> mission = missionMap.at("mgs");
+  
+ 
+  
+
+  // check a kernel from each regex exists in their quality groups
+  vector<string> kernelToCheck =  getKernelList(res.at("mgs").at("ck").at("reconstructed"));
+  vector<string> expected = {"mgs_sc_ab1.bc"};
+  
+  for (auto &e : expected) { 
+    auto it = find(kernelToCheck.begin(), kernelToCheck.end(), e);
+    if (it == kernelToCheck.end()) {
+      FAIL() << e << " was not found in the kernel results";
+    }
+  }
+  
+  kernelToCheck = getKernelList(res.at("mgs").at("iak")); 
+  expected = {"mocAddendum001.ti"};
+  for (auto &e : expected) { 
+    auto it = find(kernelToCheck.begin(), kernelToCheck.end(), e);
+    if (it == kernelToCheck.end()) {
+      FAIL() << e << " was not found in the kernel results";
+    }
+  }
+
+
+  kernelToCheck = getKernelList(res.at("mgs").at("ik")); 
+  expected = {"moc20.ti", "tes12.ti", "mola25.ti"};
+  for (auto &e : expected) { 
+    auto it = find(kernelToCheck.begin(), kernelToCheck.end(), e);
+    if (it == kernelToCheck.end()) {
+      FAIL() << e << " was not found in the kernel results";
+    }
+  }
+
+  kernelToCheck = getKernelList(res.at("mgs").at("sclk")); 
+  expected = {"MGS_SCLKSCET.00032.tsc"};
+  for (auto &e : expected) { 
+    auto it = find(kernelToCheck.begin(), kernelToCheck.end(), e);
+    if (it == kernelToCheck.end()) {
+      FAIL() << e << " was not found in the kernel results";
+    }
+  }
+
+  kernelToCheck = getKernelList(res.at("mgs").at("spk").at("reconstructed")); 
+  expected = {"mgs_ext24.bsp"};
+  for (auto &e : expected) { 
+    auto it = find(kernelToCheck.begin(), kernelToCheck.end(), e);
+    if (it == kernelToCheck.end()) {
+      FAIL() << e << " was not found in the kernel results";
+    }
+  }
+  
 }

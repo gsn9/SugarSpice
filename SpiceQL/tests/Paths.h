@@ -271,3 +271,15 @@ std::vector<std::string> viking2_paths = {
     "isis_data/viking2/kernels/spk/vo2_recon.bsp",
     "isis_data/viking2/kernels/spk/vo2_sedr.bsp",
 };
+
+
+// paths for mgs
+std::vector<std::string> mgs_paths = {
+    "isis_data/mgs/ck/mgs_sc_ab1.bc",
+    "isis_data/mgs/iak/mocAddendum001.ti",
+    "isis_data/mgs/ik/moc20.ti",
+    "isis_data/mgs/ik/tes12.ti",
+    "isis_data/mgs/ik/mola25.ti",
+    "isis_data/mgs/sclk/MGS_SCLKSCET.00032.tsc",
+    "isis_data/mgs/spk/mgs_ext24.bsp"
+};
