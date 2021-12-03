@@ -8,9 +8,9 @@
 using namespace SpiceQL;
 
 
-TEST_F(TempTestingFiles, UnitTestWriteCkTest) {
+TEST(IoTests, UnitTestWriteCkTest) {
   fs::path path;
-  path = tempDir / "test_ck.bsp";
+  path = static_cast<fs::path>(getenv("SPICEROOT")) / "test_ck.bsp";
 
   fs::path lskPath = fs::path("data") / "naif0012.tls"; 
   fs::path sclkPath = fs::path("data") / "lro_clkcor_2020184_v00.tsc";
@@ -44,9 +44,9 @@ TEST(IOTests, CreateSPKSegmentTest) {
 }
 
 
-TEST_F(TempTestingFiles, WriteSPKSegmentTest) {
+TEST(IoTests, WriteSPKSegmentTest) {
   fs::path tpath;
-  tpath = tempDir / "test_spk.bsp";
+  tpath = static_cast<fs::path>(getenv("SPICEROOT")) / "test_spk.bsp";
 
   std::string comment = "This is a comment for \n a test SPK segment";
   int body = 1;
@@ -67,8 +67,8 @@ TEST_F(TempTestingFiles, WriteSPKSegmentTest) {
 }
 
 
-TEST_F(TempTestingFiles, writeTextKernelTest) { 
-  fs::path tpath = tempDir / "test_ik.ti";
+TEST(IoTests, writeTextKernelTest) { 
+  fs::path tpath = static_cast<fs::path>(getenv("SPICEROOT")) / "test_ik.ti";
 
   nlohmann::json j = {
     {"test_pi", 3.141},

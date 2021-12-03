@@ -28,7 +28,6 @@ namespace SpiceQL {
   std::string getLatestKernel(std::vector<std::string> kernels);
 
 
-
    /**
     * @brief returns a JSON object of only the latest version of each kernel type
     *
@@ -49,7 +48,7 @@ namespace SpiceQL {
     *  Takes in a kernel key and returns the value associated with that kernel as a vector of string
     *  Note: This function is for when the kernel has more than 1 value associated with it, ie: INS-236800_FOV_REF_VECTOR  = ( 1.0, 0.0, 0.0 )
     * 
-    * @param root key - Kernel to get values from 
+    * @param key key - Kernel to get values from 
     * @returns vector of values in the form of a string 
    **/
   std::vector<std::string> getKernelVectorValue(std::string key);
@@ -61,7 +60,7 @@ namespace SpiceQL {
     *  Takes in a kernel key and returns the value associated with that kernel as a string 
     *  Note: this function is for when the kernal has a single value associated with it, ie:   INS-236800_FOV_REF_ANGLE   = ( 5.27 )
     * 
-    * @param root key - Kernel to get values from 
+    * @param key key - Kernel to get values from 
     * @returns string of value associated with key
    **/
   std::string getKernelStringValue(std::string key);
