@@ -80,7 +80,7 @@ jobs:
 
     # compair all json files against the schema 
     - name: check json files
-      working-directory: ${{github.workspace}}/SpiceQL/db
+      working-directory: ${{github.workspace}}/SpiceQL/db/schema
       run: |
         for file in *.json;
             do

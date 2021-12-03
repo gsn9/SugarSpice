@@ -30,7 +30,7 @@
       "pck" : {
         "kernels" : ["moon_080317.tf", "moon_assoc_me.tf"]
       },
-      "deps" : "lro"
+      "deps" : "/lro"
   },
   "lroc" : {
     "ck" : {
@@ -44,6 +44,6 @@
     "ik" : {
       "kernels" :"lro_lroc_v[0-9]{2}.ti"
     },
-    "deps" : "moc"
+    "deps" : "/moc"
   }
 }

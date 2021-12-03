@@ -1,8 +1,7 @@
 {
   "base" : {
     "lsk" : {
-      "kernels" : ["naif[0-9]{4}.tls"],
-      "deps" : []
+      "kernels" : ["naif[0-9]{4}.tls"]
     }
   }
 }

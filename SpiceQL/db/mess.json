@@ -2,24 +2,16 @@
     "mdis" : {
         "ck" : {
             "reconstructed" : {
-              "kernels" : "msgr_[0-9]{4}_v[0-9]{2}.bc",
-              "deps" : {}
+              "kernels" : "msgr_[0-9]{4}_v[0-9]{2}.bc"
             },
             "smithed" : {
-              "kernels" : "msgr_mdis_sc[0-9]{4}_usgs_v[0-9]{1}.bc",
-              "deps" : {}
+              "kernels" : "msgr_mdis_sc[0-9]{4}_usgs_v[0-9]{1}.bc"
             },
-            "deps" : {
-                "objs" : ["/mess/ck", "/mdis_att/ck", "/base/lsk", "/mess/sclk"]
-            }
+            "deps" : ["/mess/ck", "/mdis_att/ck"]
         },
         "spk" : {
             "reconstructed" : {
-              "kernels" : "msgr_20040803.*\\.bsp",
-              "deps" : {}
-            },
-            "deps" : {
-                "objs" : ["/base/lsk", "/mess/sclk"]
+              "kernels" : "msgr_20040803.*\\.bsp"
             }
         },
         "tspk" : {
@@ -36,30 +28,21 @@
         },
         "pck" : {
           "na" : {
-            "kernels" : "pck00010_msgr_v[0-9]{2}.tpc",
-            "deps" : []
+            "kernels" : "pck00010_msgr_v[0-9]{2}.tpc"
           }
         }
     },
     "mdis_att" : {
         "ck" : {
             "reconstructed" : {
-              "kernels" : "msgr_mdis_sc[0-9]{6}_[0-9]{6}_sub_v[0-9]{1}.bc",
-              "deps" : {}
-            },
-            "deps" : {
-                "objs" : ["/base/lsk", "/mess/sclk"]
+              "kernels" : "msgr_mdis_sc[0-9]{6}_[0-9]{6}_sub_v[0-9]{1}.bc"
             }
         }
     },
     "mess" : {
         "ck" : {
             "reconstructed" : {
-              "kernels" : "msgr_mdis_gm[0-9]{6}_[0-9]{6}v[0-9]{1}.bc",
-              "deps" : {}
-            },
-            "deps" : {
-                "objs" : ["/base/lsk", "/mess/sclk"]
+              "kernels" : "msgr_mdis_gm[0-9]{6}_[0-9]{6}v[0-9]{1}.bc"
             }
         },
         "sclk" : {

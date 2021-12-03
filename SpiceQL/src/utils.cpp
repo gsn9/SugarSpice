@@ -6,13 +6,16 @@
 
 #include <exception>
 #include <fstream>
-#include <optional>
 
 #include <SpiceUsr.h>
 #include <SpiceZfc.h>
 #include <SpiceZmc.h>
 
 #include <ghc/fs_std.hpp>
+
+#include <fmt/chrono.h>
+#include <fmt/format.h>
+#include <fmt/compile.h>
 
 #include <nlohmann/json.hpp>
 
@@ -77,12 +80,20 @@ namespace SpiceQL {
   }
 
 
-  json mergeConfigs(json baseConfig, json mergingConfig) {
-    for (json::iterator it = mergingConfig.begin(); it != mergingConfig.end(); ++it) {
+  vector<string> getPathsFromRegex (string root, json r) {
+      vector<string> regexes = jsonArrayToVector(r);
+      regex reg(fmt::format("({})", fmt::join(regexes, "|")));
+      vector<string> paths = glob(root, reg, true);
+
+      return paths;
+  }
+
+  void mergeConfigs(json &baseConfig, const json &mergingConfig) {
+    for (json::const_iterator it = mergingConfig.begin(); it != mergingConfig.end(); ++it) {
       if (baseConfig.contains(it.key())) {
         if (baseConfig[it.key()].is_object()) {
           if (it.value().is_object()) {
-            baseConfig[it.key()] = mergeConfigs(baseConfig[it.key()], it.value());
+            mergeConfigs(baseConfig[it.key()], it.value());
           }
           else {
             throw invalid_argument("Invalid merge. Cannot merge an object with a non-object.");
@@ -111,7 +122,6 @@ namespace SpiceQL {
         baseConfig[it.key()] = it.value();
       }
     }
-    return baseConfig;
   }
 
 
@@ -470,10 +480,6 @@ namespace SpiceQL {
       }
     }
 
-    //for(auto& t: result) {
-    //  cout << fmt::format(FMT_COMPILE("start/stop: {}, {}\n"), t.first, t.second);
-    //}
-
     return result;
   }
 
@@ -564,25 +570,46 @@ namespace SpiceQL {
   }
 
 
-  json getInstrumentConfig(string instrument) {
-    vector<string> paths = getAvailableConfigFiles();
-    json conf;
-
-    for(const fs::path &p : paths) {
-      ifstream i(p);
-      i >> conf;
-      if (conf.contains(instrument)) {
-        if (conf[instrument].contains("deps")) {
-          for(auto & dep: jsonArrayToVector(conf[instrument]["deps"])) {
-            conf[instrument] = mergeConfigs(conf[instrument], conf[dep]);
-          }
-          conf[instrument].erase("deps");
+  void resolveConfigDependencies(json &config, const json &dependencies) {
+    vector<json::json_pointer> depLists = findKeyInJson(config, "deps");
+    // 10 seems like a reasonable number of recursive dependencies to allow
+    int maxRecurssion = 10;
+    int numRecurssions = 0;
+    while (!depLists.empty()) {
+      for (auto & depList: depLists) {
+        vector<string> depsToMerge = jsonArrayToVector(config[depList]);
+        eraseAtPointer(config, depList);
+        json::json_pointer mergeInto = depList.parent_pointer();
+        for(auto & depString: depsToMerge) {
+          json::json_pointer mergeFrom(depString);
+          mergeConfigs(config[mergeInto], dependencies[mergeFrom]);
         }
-        return conf[instrument];
+      }
+      depLists = findKeyInJson(config, "deps");
+      if (++numRecurssions > maxRecurssion) {
+        throw invalid_argument(fmt::format("Could not resolve config dependencies, "
+                                           "max recursion depth of {} reached", maxRecurssion));
       }
     }
+  }
 
-    throw invalid_argument(fmt::format("Config file for \"{}\" not found", instrument));
+
+  size_t eraseAtPointer(json &j, json::json_pointer ptr) {
+    vector<string> path;
+    while(!ptr.empty()) {
+      path.insert(path.begin(), ptr.back());
+      ptr.pop_back();
+    }
+    json::json_pointer parentObj;
+    for (size_t i = 0; i < path.size() - 1; i++) {
+      parentObj.push_back(path[i]);
+    }
+    if (j.contains(parentObj)) {
+      return j[parentObj].erase(path.back());
+    }
+    else {
+      return 0;
+    }
   }
 
 
@@ -604,4 +631,3 @@ namespace SpiceQL {
   }
 
 }
-

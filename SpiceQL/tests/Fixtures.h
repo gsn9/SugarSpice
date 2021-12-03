@@ -1,5 +1,9 @@
 #pragma once
 
+#include <HippoMocks/hippomocks.h>
+
+#include "config.h"
+
 #include "gtest/gtest.h"
 #include <ghc/fs_std.hpp>
 
@@ -9,7 +13,7 @@ using namespace std;
 using namespace SpiceQL;
 
 
-class TempTestingFiles : public ::testing::Test {
+class TempTestingFiles : public ::testing::Environment {
   protected:
     fs::path tempDir;
 
@@ -17,7 +21,7 @@ class TempTestingFiles : public ::testing::Test {
     void TearDown() override;
 };
 
-class IsisDataDirectory : public TempTestingFiles {
+class IsisDataDirectory : public ::testing::Test {
   protected: 
     
     string base;
@@ -31,7 +35,7 @@ class IsisDataDirectory : public TempTestingFiles {
     void compareKernelSets(string name);
 };
 
-class KernelDataDirectories : public ::testing::Test {
+class KernelDataDirectories : public ::testing::Test  {
   protected:
 
     vector<string> paths;
@@ -41,11 +45,11 @@ class KernelDataDirectories : public ::testing::Test {
 };
 
 
-class LroKernelSet : public TempTestingFiles {
+class LroKernelSet : public ::testing::Test  {
   protected:
     KernelPool &pool = KernelPool::getInstance();
-
-    string root;
+    
+    fs::path root;
     string lskPath;
     string sclkPath;
     string ckPath1;
@@ -62,3 +66,11 @@ class LroKernelSet : public TempTestingFiles {
     void TearDown() override;
 };
 
+class TestConfig : public KernelDataDirectories {
+  protected:
+
+    SpiceQL::Config testConfig;
+
+    void SetUp() override;
+    void TearDown() override;
+};
