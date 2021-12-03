@@ -9,10 +9,6 @@
 #include <regex>
 #include <optional>
 
-#include <fmt/chrono.h>
-#include <fmt/format.h>
-#include <fmt/compile.h>
-
 #include <nlohmann/json.hpp>
 
 #include "spice_types.h"
@@ -65,17 +61,17 @@ namespace SpiceQL {
    **/
   std::vector<std::string> getPathsFromRegex (std::string root, nlohmann::json r);
 
+
   /**
    * @brief Merge two json configs
    *
    * When arrays are merged, the values from the base config will appear
    * first in the merged config.
    *
-   * @param baseConfig First json config
-   * @param mergingConfig Second json config
-   * @return nlohmann::json
+   * @param baseConfig The config to merge into
+   * @param mergingConfig The config to merge into the base config
    */
-  nlohmann::json mergeConfigs(nlohmann::json baseConfig, nlohmann::json mergingConfig);
+  void mergeConfigs(nlohmann::json &baseConfig, const nlohmann::json &mergingConfig);
 
 
   /**
@@ -285,17 +281,29 @@ namespace SpiceQL {
 
 
    /**
-    * @brief Returns the Instrument specific Spice config.
+    * @brief resolve the dependencies in a config in place
     *
-    * Given an instrument, search a prioritized list of directories for
-    * the json config file that contains that instrument. See getAvailableConfigs
-    * for the search hierarchy
+    * Given a config with "deps" keys in it and a second config to extract
+    * dependencies from, recursively resolve all of the deps into their actual
+    * values. Only allows up to 10 recurssions.
     *
-    * @param instrument The name of the instrument to find a config for
+    * @param config The config to populate
+    * @param dependencies The config to pull dependencies from
     *
-    * @returns The config file parsed into a JSON object
-   **/
-   nlohmann::json getInstrumentConfig(std::string instrument);
+    * @returns The full instrument config
+    */
+   void resolveConfigDependencies(nlohmann::json &config, const nlohmann::json &dependencies);
+
+
+   /**
+    * @brief erase a part of a json object based on a json pointer
+    *
+    * @param j The json object ot erase part of. Modified in place
+    * @param ptr The object to erase
+    *
+    * @returns The number of objects removed
+    */
+   size_t eraseAtPointer(nlohmann::json &j, nlohmann::json::json_pointer ptr);
 
 
   /**

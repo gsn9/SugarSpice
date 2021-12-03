@@ -186,6 +186,12 @@ namespace SpiceQL {
   json searchMissionKernels(json kernels, std::vector<double> times, bool isContiguous)  {
     json reducedKernels;
 
+    // Load any SCLKs in the config
+    vector<KernelSet> sclkKernels;
+    for (auto &p : findKeyInJson(kernels, "sclk", true)) {
+      sclkKernels.push_back(KernelSet(kernels[p]));
+    }
+
     vector<json::json_pointer> ckpointers = findKeyInJson(kernels, "ck", true);
     vector<json::json_pointer> spkpointers = findKeyInJson(kernels, "spk", true);
     vector<json::json_pointer> pointers(ckpointers.size() + spkpointers.size());

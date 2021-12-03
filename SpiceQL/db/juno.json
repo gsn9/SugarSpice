@@ -2,23 +2,15 @@
     "juno" : {
         "ck" : {
             "reconstructed" : {
-              "kernels" : "juno_sc_rec(_[0-9]{6}){2}_v0[0-9].bc",
-              "deps" : {}
+              "kernels" : "juno_sc_rec(_[0-9]{6}){2}_v0[0-9].bc"
             },
             "predicted" : {
               "kernels": "juno_sc_raw(_[0-9]{6}){2}.bc"
-            },
-            "deps" : {
-                "objs" : ["/base/lsk", "/juno/sclk"]
             }
         },
         "spk" : {
             "reconstructed" : {
-              "kernels" : "juno_rec(_[0-9]{6}){3}.bsp",
-              "deps" : {}
-            },
-            "deps" : {
-                "objs" : ["/base/lsk"]
+              "kernels" : "juno_rec(_[0-9]{6}){3}.bsp"
             }
         },
         "fk" : {

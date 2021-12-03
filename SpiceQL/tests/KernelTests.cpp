@@ -22,13 +22,13 @@ TEST_F(LroKernelSet, UnitTestStackedKernelConstructorDestructor) {
     ktotal_c("text", &nkernels);
 
     // base LSK still loaded
-    EXPECT_EQ(nkernels, 3);
+    EXPECT_EQ(nkernels, 2);
     EXPECT_EQ(pool.getRefCounts().at(lskPath), 1);
   }
 
   // SCLKs and LSKs are considered text kernels, so they should stay loaded
   ktotal_c("text", &nkernels);
-  EXPECT_EQ(nkernels, 2);
+  EXPECT_EQ(nkernels, 1);
   EXPECT_EQ(pool.getRefCount(lskPath), 0);
 }
 
@@ -46,13 +46,13 @@ TEST_F(LroKernelSet, UnitTestStackedKernelCopyConstructor) {
     ktotal_c("text", &nkernels);
 
     // 5 total text kernels, but the lsk should have been loaded 3 times
-    EXPECT_EQ(nkernels, 5);
+    EXPECT_EQ(nkernels, 4);
     EXPECT_EQ(pool.getRefCounts().at(lskPath), 3);
   }
 
   // SCLKs and LSKs are considered text kernels, so they should stay loaded
   ktotal_c("text", &nkernels);
-  EXPECT_EQ(nkernels, 2);
+  EXPECT_EQ(nkernels, 1);
   EXPECT_EQ(pool.getRefCount(lskPath), 0);
 }
 
@@ -79,7 +79,7 @@ TEST_F(LroKernelSet, UnitTestStackedKernelSetConstructorDestructor) {
 
     // should match what spice counts
     ktotal_c("text", &nkernels);
-    EXPECT_EQ(nkernels, 8);
+    EXPECT_EQ(nkernels, 7);
     ktotal_c("ck", &nkernels);
     EXPECT_EQ(nkernels, 2);
     ktotal_c("spk", &nkernels);
@@ -90,13 +90,13 @@ TEST_F(LroKernelSet, UnitTestStackedKernelSetConstructorDestructor) {
     EXPECT_EQ(pool.getRefCount(fkPath), 2);
     EXPECT_EQ(pool.getRefCount(ckPath1), 2);
     EXPECT_EQ(pool.getRefCount(spkPath1), 2);
-    EXPECT_EQ(pool.getRefCount(sclkPath), 3);
+    EXPECT_EQ(pool.getRefCount(sclkPath), 2);
     EXPECT_EQ(pool.getRefCount(ikPath2), 2);
   }
 
   // All kernels in previous stack should be unfurnished
   ktotal_c("text", &nkernels);
-  EXPECT_EQ(nkernels, 5);
+  EXPECT_EQ(nkernels, 4);
   ktotal_c("ck", &nkernels);
   EXPECT_EQ(nkernels, 1);
   ktotal_c("spk", &nkernels);
@@ -106,7 +106,7 @@ TEST_F(LroKernelSet, UnitTestStackedKernelSetConstructorDestructor) {
   EXPECT_EQ(pool.getRefCount(fkPath), 1);
   EXPECT_EQ(pool.getRefCount(ckPath1), 1);
   EXPECT_EQ(pool.getRefCount(spkPath1), 1);
-  EXPECT_EQ(pool.getRefCount(sclkPath), 2);
+  EXPECT_EQ(pool.getRefCount(sclkPath), 1);
   EXPECT_EQ(pool.getRefCount(ikPath2), 1);
 }
 

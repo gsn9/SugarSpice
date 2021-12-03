@@ -13,12 +13,6 @@
           "99213_99243cb_ISS.bc",
           "0[0-9]{4}_[0-9]{5}c[0-9]{1}_ISS.bc"
         ]
-      },
-      "deps": {
-        "objs": [
-          "/base/lsk",
-          "/mess/lsk"
-        ]
       }
     },
     "fk": {
@@ -38,10 +32,6 @@
       "kernels": "pck[0-9]{5}.tpc",
       "smithed": {
         "kernels": "cpck15Dec2017_2019Shape.tpc"
-      },
-      "deps": {
-        "lsk": "naif0012.tls",
-        "objs":[]
       }
     },
     "sclk": {

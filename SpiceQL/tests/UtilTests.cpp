@@ -51,13 +51,68 @@ TEST(UtilTests, findKeyInJson) {
 }
 
 
-TEST(UtilTests, getInstrumentConfig) {
-  nlohmann::json lrocConfig = getInstrumentConfig("lroc");
-  nlohmann::json lroConfig = getMissionConfig("lro");
-  nlohmann::json expectedConfig = mergeConfigs(lroConfig["lroc"], lroConfig["moc"]);
-  expectedConfig.erase("deps");
+TEST(UtilTests, resolveConfigDependencies) {
+  nlohmann::json baseConfig = R"(
+  {
+    "mission_1" : {
+      "mission_key" : {
+        "array_key" : ["array_1", "array_2"]
+      },
+      "deps" : ["/mission_2/bad_key"]
+    },
+    "mission_2" : {
+      "nested_key" : {
+        "value_key" : "value_1"
+      },
+      "bad_key" : {
+        "bad_nested_key" : "bad_value"
+      }
+    },
+    "instrument" : {
+      "instrument_key" : {
+        "dummy_key" : "dummy_1"
+      },
+      "nested_key" : {
+        "value_key" : "value_2",
+        "deps" : ["/mission_2/nested_key"]
+      },
+      "deps" : ["/mission_1"]
+    }
+  })"_json;
 
-  EXPECT_EQ(lrocConfig, expectedConfig);
+  nlohmann::json resolvedConfig = baseConfig["instrument"];
+  resolveConfigDependencies(resolvedConfig, baseConfig);
+
+  nlohmann::json expectedConfig = R"(
+  {
+    "instrument_key" : {
+      "dummy_key" : "dummy_1"
+    },
+    "mission_key" : {
+      "array_key" : ["array_1", "array_2"]
+    },
+    "bad_nested_key" : "bad_value",
+    "nested_key" : {
+      "value_key" : ["value_2", "value_1"]
+    }
+  })"_json;
+  EXPECT_EQ(resolvedConfig, expectedConfig);
+}
+
+
+TEST(UtilTests, resolveConfigDependenciesLoop) {
+  nlohmann::json baseConfig = R"(
+  {
+    "Thing_1" : {
+      "deps" : ["/Thing_2"]
+    },
+    "Thing_2" : {
+      "deps" : ["/Thing_1"]
+    }
+  })"_json;
+
+  nlohmann::json resolvedConfig = baseConfig["Thing_1"];
+  EXPECT_THROW(resolveConfigDependencies(resolvedConfig, baseConfig), invalid_argument);
 }
 
 
@@ -101,7 +156,7 @@ TEST(UtilTests, mergeConfigs) {
     }
   })"_json;
 
-  nlohmann::json mergedConfig = mergeConfigs(baseConfig, mergeConfig);
+  mergeConfigs(baseConfig, mergeConfig);
 
   nlohmann::json expectedConfig = R"({
     "ck" : {
@@ -131,7 +186,7 @@ TEST(UtilTests, mergeConfigs) {
     }
   })"_json;
 
-  EXPECT_EQ(mergedConfig, expectedConfig);
+  EXPECT_EQ(baseConfig, expectedConfig);
 
   nlohmann::json objectConfig = R"({
     "testkey" : {}
@@ -143,4 +198,42 @@ TEST(UtilTests, mergeConfigs) {
 
   EXPECT_THROW(mergeConfigs(objectConfig, valueConfig), std::invalid_argument);
   EXPECT_THROW(mergeConfigs(valueConfig, objectConfig), std::invalid_argument);
+}
+
+TEST(UtilTests, eraseAtPointer) {
+  nlohmann::json baseJ = R"(
+  {
+    "outer_key" : {
+      "middle_key" : {
+        "inner_key" : {
+          "value_to_erase" : "dummy"
+        },
+        "extra_inner_key" : "dummy"
+      },
+      "extra_middle_key" : "dummy"
+    },
+    "extra_outer_key" : "dummy"
+  })"_json;
+
+  nlohmann::json j = baseJ;
+  size_t numErased = eraseAtPointer(j, nlohmann::json::json_pointer("/outer_key/middle_key/inner_key/value_to_erase"));
+  EXPECT_EQ(numErased, 1);
+  nlohmann::json expected = R"(
+  {
+    "outer_key" : {
+      "middle_key" : {
+        "inner_key" : {
+        },
+        "extra_inner_key" : "dummy"
+      },
+      "extra_middle_key" : "dummy"
+    },
+    "extra_outer_key" : "dummy"
+  })"_json;
+  EXPECT_EQ(j, expected);
+
+  j = baseJ;
+  numErased = eraseAtPointer(j, nlohmann::json::json_pointer("/outer_key/middle_key/bad_key"));
+  EXPECT_EQ(numErased, 0);
+  EXPECT_EQ(j, baseJ);
 }

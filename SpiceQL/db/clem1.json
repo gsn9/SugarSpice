@@ -9,18 +9,11 @@
       },
       "smithed" : {
         "kernels" : "clem_ulcn2005_6hr.bc"
-      },
-      "deps" : {
-        "objs" : ["/base/lsk", "/clem1/sclk"]
       }
     },
     "spk" : {
       "reconstructed" : {
-        "kernels" :  "clem.*\\.bsp",
-        "deps": {}
-      },
-      "deps" : {
-        "objs" : ["/base/lsk", "/clem1/sclk"]
+        "kernels" :  "clem.*\\.bsp"
       }
     },
     "fk" : {
@@ -33,11 +26,13 @@
     },
     "iak" : {
       "kernels" : "uvvisAddendum[0-9]{3}.ti"
-    }
+    },
+    "deps" : ["/clem1"]
   },
   "nir" : {
     "iak" : {
       "kernels" : "nirAddendum[0-9]{3}.ti"
-    }
+    },
+    "deps" : ["/clem1"]
   }
 }

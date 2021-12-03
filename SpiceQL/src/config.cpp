@@ -48,6 +48,7 @@ namespace SpiceQL {
 
 
   json Config::evaluateJson(json eval_json, bool merge) {
+    resolveConfigDependencies(eval_json, config);
 
     vector<json::json_pointer> json_to_eval = SpiceQL::findKeyInJson(eval_json, "kernels", true);
 

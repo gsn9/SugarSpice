@@ -28,6 +28,16 @@
 
 %template(_string_list) std::vector< std::string >;
 
+%exception {
+  try {
+    $action
+  } catch (std::exception const& e) {
+    SWIG_exception(SWIG_RuntimeError, (std::string("std::exception: ") + e.what()).c_str());
+  } catch (...) {
+    SWIG_exception(SWIG_UnknownError, "Unknown error");
+  }
+}
+
 %include "config.i"
 %include "io.i"
 %include "query.i"
