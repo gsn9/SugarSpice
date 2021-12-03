@@ -275,6 +275,7 @@ std::vector<std::string> viking2_paths = {
 //paths for odyssey
 std::vector<std::string> odyssey_paths = {
     "/isis_data/odyssey/kernels/ck/themis_nightir_merged_2018Mar02_ck.bc",
+    "/isis_data/odyssey/kernels/ck/themis_dayir_merged_2018Jul13_ck.bc",
     "/isis_data/odyssey/kernels/ck/m01_sc_ab1234.bc",
     "/isis_data/odyssey/kernels/ck/m01_sc_map6_rec_nadir.bc",
     "/isis_data/odyssey/kernels/ck/m01_sc_map11_rec_nadir.bc",
@@ -292,6 +293,7 @@ std::vector<std::string> odyssey_paths = {
     "/isis_data/odyssey/kernels/sclk/ORB1_SCLKSCET.12345.tsc",
     "/isis_data/odyssey/kernels/spk/m01_map.bsp",
     "/isis_data/odyssey/kernels/spk/themis_dayir_merged_2018Jul13_spk.bsp",
+    "/isis_data/odyssey/kernels/spk/themis_nightir_merged_2018Mar02_spk.bsp",
     "/isis_data/odyssey/kernels/spk/m01_ab_v2.bsp",
     "/isis_data/odyssey/kernels/spk/m01_map1_v1.bsp",
     "/isis_data/odyssey/kernels/spk/m01_map2.bsp",

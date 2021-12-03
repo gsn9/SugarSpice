@@ -347,13 +347,12 @@ TEST_F(KernelDataDirectories, FunctionalTestSearchMissionKernelsOdyssey) {
   mocks.OnCallFunc(ls).Return(paths);
 
   nlohmann::json res = searchMissionKernels("/isis_data/", conf);
-
   EXPECT_EQ(res["odyssey"]["ck"]["reconstructed"]["kernels"].size(), 11);
-  EXPECT_EQ(res["odyssey"]["ck"]["smithed"]["kernels"].size(), 1);
+  EXPECT_EQ(res["odyssey"]["ck"]["smithed"]["kernels"].size(), 2);
   EXPECT_EQ(res["odyssey"]["fk"]["kernels"].size(), 2);
   EXPECT_EQ(res["odyssey"]["iak"]["kernels"].size(), 1);
   EXPECT_EQ(res["odyssey"]["sclk"]["kernels"].size(), 1); 
   EXPECT_EQ(res["odyssey"]["spk"]["predicted"]["kernels"].size(), 1);
-  EXPECT_EQ(res["odyssey"]["spk"]["smithed"]["kernels"].size(), 1);
+  EXPECT_EQ(res["odyssey"]["spk"]["smithed"]["kernels"].size(), 2);
   EXPECT_EQ(res["odyssey"]["spk"]["reconstructed"]["kernels"].size(), 7);
 }

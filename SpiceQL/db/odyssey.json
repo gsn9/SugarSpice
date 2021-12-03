@@ -2,7 +2,10 @@
     "odyssey":{
         "ck":{
             "smithed":{
-                "kernels": "themis_nightir_merged_2018Mar02_ck.bc"
+                "kernels": [
+                    "themis_nightir_merged_2018Mar02_ck.bc",
+                    "themis_dayir_merged_2018Jul13_ck.bc"
+                ]
             },
             "reconstructed":{
                 "kernels":[
@@ -21,10 +24,7 @@
             }
         },
         "fk":{
-            "kernels":[
-                "m01_v[0-9]{2}.tf",
-                "m01_v28.tf"
-            ]
+            "kernels":"m01_v[0-9]{2}.tf"
         },
         "iak":{
             "kernels":"themisAddendum[0-9]{3}.ti"
@@ -38,7 +38,10 @@
                 "kernels":"m01_map.bsp"
             },
             "smithed":{
-                "kernels":"themis_dayir_merged_2018Jul13_spk.bsp"
+                "kernels":[
+                    "themis_dayir_merged_2018Jul13_spk.bsp",
+                    "themis_nightir_merged_2018Mar02_spk.bsp"
+                ]
             },
             "reconstructed":{
                 "kernels":[
