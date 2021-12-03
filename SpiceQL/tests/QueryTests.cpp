@@ -401,7 +401,6 @@ TEST_F(KernelDataDirectories, FunctionalTestSearchMissionKernelsOdyssey) {
 
   nlohmann::json res = searchMissionKernels("/isis_data/", conf);
 
-  cout << res <<endl;
   EXPECT_EQ(res["odyssey"]["ck"]["reconstructed"]["kernels"].size(), 11);
   EXPECT_EQ(res["odyssey"]["ck"]["smithed"]["kernels"].size(), 1);
   EXPECT_EQ(res["odyssey"]["fk"]["kernels"].size(), 2);
