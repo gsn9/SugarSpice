@@ -344,10 +344,7 @@ TEST_F(IsisDataDirectory, FunctionalTestMgsConf) {
 
   set<string> kernels = getKernelSet(res);
   set<string> mission = missionMap.at("mgs");
-  
  
-  
-
   // check a kernel from each regex exists in their quality groups
   vector<string> kernelToCheck =  getKernelList(res.at("mgs").at("ck").at("reconstructed"));
   vector<string> expected = {"mgs_sc_ab1.bc"};
