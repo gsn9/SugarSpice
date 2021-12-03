@@ -12,7 +12,7 @@ using json = nlohmann::json;
 using namespace SpiceQL;
 
 TEST_F(TestConfig, FunctionalTestConfigConstruct) {
-  json megaConfig = testConfig.getRawConfig();
+  json megaConfig = testConfig.globalConf();
 
   ASSERT_EQ(megaConfig.size(), 25);
 }
@@ -28,8 +28,8 @@ TEST_F(TestConfig, FunctionalTestConfigEval) {
   mocks.OnCallFunc(ls).Return(paths);
   mocks.OnCallFunc(getDataDirectory).Return("/isis_data/");
 
-  json config_eval_res = testConfig.getJson();
-  json pointer_eval_res = testConfig.getJson("/clem1", true);
+  json config_eval_res = testConfig.get();
+  json pointer_eval_res = testConfig.get("/clem1");
 
   json::json_pointer pointer = "/clem1/ck/reconstructed/kernels"_json_pointer;
   int expected_number = 4;
@@ -85,8 +85,8 @@ TEST_F(TestConfig, FunctionalTestConfigGlobalEval) {
   mocks.OnCallFunc(ls).Return(paths);
   mocks.OnCallFunc(getDataDirectory).Return("/isis_data/");
 
-  testConfig.getJson();
-  json config_eval_res = testConfig.getRawConfig();
+  testConfig.get();
+  json config_eval_res = testConfig.globalConf();
 
   json::json_pointer pointer = "/clem1/ck/reconstructed/kernels"_json_pointer;
   int expected_number = 4;
@@ -124,8 +124,8 @@ TEST_F(TestConfig, FunctionalTestConfigAccessors) {
   MockRepository mocks; 
   mocks.OnCallFunc(SpiceQL::ls).Return(paths);
 
-  EXPECT_EQ(base.getJson()["lsk"]["kernels"].at(0), "/isis_data/base/kernels/sclk/naif0001.tls");
-  EXPECT_EQ(base_pointer.getJson()["lsk"]["kernels"].at(0), "/isis_data/base/kernels/sclk/naif0001.tls");
+  EXPECT_EQ(base.get()["lsk"]["kernels"].at(0), "/isis_data/base/kernels/sclk/naif0001.tls");
+  EXPECT_EQ(base_pointer.get()["lsk"]["kernels"].at(0), "/isis_data/base/kernels/sclk/naif0001.tls");
 }
 
 TEST_F(TestConfig, FunctionalTestsConfigKeySearch) {

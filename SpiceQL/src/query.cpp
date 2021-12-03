@@ -202,6 +202,8 @@ namespace SpiceQL {
     // refine cks for every instrument/category
     for (auto &p : pointers) {
       json cks = kernels[p];
+      cout << p << endl;
+      cout << cks << endl;
       if(cks.is_null() ) {
         continue;
       }
@@ -220,6 +222,7 @@ namespace SpiceQL {
             auto isInRange = [&interval](double d) -> bool {return d >= interval.first && d <= interval.second;};
 
             if (isContiguous && all_of(times.cbegin(), times.cend(), isInRange)) {
+              cout << "passed " << kernel << endl;
               newKernels.push_back(kernel);
             }
             else if (any_of(times.cbegin(), times.cend(), isInRange)) {
@@ -235,6 +238,7 @@ namespace SpiceQL {
     kernels.merge_patch(reducedKernels);
     return kernels;
   }
+
 
   json searchMissionKernels(json conf) {
     fs::path root = getDataDirectory();

@@ -5,6 +5,9 @@
     },
     "iak" : {
       "kernels" : "lro_instrumentAddendum_v[0-9]{2}.ti"
+    },
+    "sclk" : {
+      "kernels" : ["lro_clkcor_[0-9]{7}_v[0-9]{2}.tsc"]
     }
   },
   "moc" : {
@@ -20,9 +23,6 @@
         "smithed" : {
           "kernels" : ["LRO_.*_GRGM660.*.bsp", "LRO_.*_GRGM900C.*.BSP"]
         }
-      },
-      "sclk" : {
-        "kernels" : ["lro_clkcor_[0-9]{7}_v[0-9]{2}.tsc"]
       },
       "fk" : {
         "kernels" : ["lro_frames_[0-9]{7}_v[0-9]{2}.tf"]

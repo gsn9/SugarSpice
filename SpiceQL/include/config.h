@@ -64,15 +64,46 @@ namespace SpiceQL {
        * @param merge if true, merges with the internal 
        * @return nlohmann::json 
        */
-      nlohmann::json getJson(std::string pointer, bool merge=false);
+      nlohmann::json get(std::string pointer = "");
 
 
       /**
-       * @brief returns the kernels 
+       * @brief 
        * 
+       * @param pointer 
        * @return nlohmann::json 
        */
-      nlohmann::json getJson();
+      nlohmann::json get(std::vector<std::string> pointer);
+
+
+      /**
+       * @brief Given a conf json object, expands the regeexes to paths 
+       * 
+       * @param pointer Json key or pointer to expand
+       * @param merge if true, merges with the internal 
+       * @return nlohmann::json 
+       */
+      nlohmann::json getRecursive(std::string pointer);
+
+
+      /**
+       * @brief Given a conf json object, expands the regeexes to paths 
+       * 
+       * @param pointer Json key or pointer to expand
+       * @param merge if true, merges with the internal 
+       * @return nlohmann::json 
+       */
+      nlohmann::json getLatestRecursive(std::string pointer);
+
+
+      /**
+       * @brief Given a conf json object, expands the regeexes to paths 
+       * 
+       * @param pointer Json key or pointer to expand
+       * @param merge if true, merges with the internal 
+       * @return nlohmann::json 
+       */
+      nlohmann::json getLatest(std::string pointer = "");
 
 
       /**
@@ -80,7 +111,7 @@ namespace SpiceQL {
        * 
        * @return nlohmann::json 
        */
-      nlohmann::json getRawConfig();
+      nlohmann::json globalConf();
 
 
       /**
@@ -99,7 +130,7 @@ namespace SpiceQL {
        * 
        * @param json json object representing a target config
        */
-      Config(nlohmann::json json);
+      Config(nlohmann::json json, std::string pointer);
 
 
       /**
@@ -109,11 +140,14 @@ namespace SpiceQL {
        * @param merge if true, merges with the internal 
        * @return nlohmann::json 
        */
-      nlohmann::json evaluateJson(nlohmann::json eval_json, bool merge=false);
+      nlohmann::json evaluateJson(nlohmann::json eval_json);
 
 
       //! internal json config
       nlohmann::json config;
+
+      //! pointer to the sub conf that the user is interacting with
+      std::string confPointer;
   };
 
 }

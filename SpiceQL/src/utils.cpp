@@ -77,13 +77,14 @@ namespace SpiceQL {
   }
 
 
-  vector<string> getPathsFromRegex (string root, json r) {
+  vector<string> getPathsFromRegex(string root, json r) {
       vector<string> regexes = jsonArrayToVector(r);
       regex reg(fmt::format("({})", fmt::join(regexes, "|")));
       vector<string> paths = glob(root, reg, true);
 
       return paths;
   }
+
 
   void mergeConfigs(json &baseConfig, const json &mergingConfig) {
     for (json::const_iterator it = mergingConfig.begin(); it != mergingConfig.end(); ++it) {
@@ -569,6 +570,7 @@ namespace SpiceQL {
 
   void resolveConfigDependencies(json &config, const json &dependencies) {
     vector<json::json_pointer> depLists = findKeyInJson(config, "deps");
+    
     // 10 seems like a reasonable number of recursive dependencies to allow
     int maxRecurssion = 10;
     int numRecurssions = 0;

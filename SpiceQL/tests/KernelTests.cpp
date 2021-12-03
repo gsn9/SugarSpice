@@ -139,3 +139,8 @@ TEST_F(LroKernelSet, UnitTestLoadTimeKernels) {
     EXPECT_TRUE(expected.find(static_cast<fs::path>(e).filename()) != expected.end());
   }
 }
+
+
+TEST_F(LroKernelSet, UnitTestSclkToEt) {
+  double et = sclkToEt("lro", "1/281199081:48971");
+}

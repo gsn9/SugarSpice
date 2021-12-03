@@ -14,6 +14,7 @@
 #include "spice_types.h"
 #include "query.h"
 #include "utils.h"
+#include "config.h"
 
 using namespace std;
 using json = nlohmann::json;
@@ -69,6 +70,7 @@ namespace SpiceQL {
     return Kernel::QUALITIES[static_cast<int>(qa)];
   }
 
+
   Kernel::Quality Kernel::translateQuality(string qa) {
     auto res = findInVector<string>(Kernel::QUALITIES, qa);
     if (res.first) {
@@ -80,6 +82,8 @@ namespace SpiceQL {
 
 
   int Kernel::translateFrame(string frame) {
+    KernelPool::getInstance();    
+    
     SpiceInt code;
     SpiceBoolean found;
 
@@ -94,6 +98,8 @@ namespace SpiceQL {
 
 
   string Kernel::translateFrame(int frame) {
+    KernelPool::getInstance();    
+
     SpiceChar name[128];
     SpiceBoolean found;
 
@@ -132,6 +138,20 @@ namespace SpiceQL {
 
       SpiceDouble et;
       utc2et_c(utc.c_str(), &et);
+      return et;
+  }
+
+
+  double sclkToEt(string mission, string sclk) {
+      // get lsk kernel
+      Config missionConf;
+      missionConf = missionConf[mission];
+
+      json sclks = missionConf.getLatestRecursive("sclk");
+      KernelSet sclkSet(sclks);
+
+      SpiceDouble et;
+      scs2e_c(Kernel::translateFrame(mission), sclk.c_str(), &et);
       return et;
   }
 
@@ -206,6 +226,9 @@ namespace SpiceQL {
 
   KernelPool::KernelPool() : refCounts() { 
     loadLeapSecondKernel();
+
+    // create aliases for spacecrafts 
+    boddef_c("mess", -236); // NAIF uses MESSENGER, we use mess for short
   }
 
 

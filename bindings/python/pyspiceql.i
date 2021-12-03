@@ -18,6 +18,10 @@
   }
 }
 
+%typemap(typecheck, precedence=SWIG_TYPECHECK_MAP) nlohmann::json {
+  $1 = PyDict_Check($input) ? 1 : 0;
+}
+
 %typemap(out) nlohmann::json {
   PyObject* module = PyImport_ImportModule("json");
   PyObject* jsonLoads = PyUnicode_FromString("loads");
@@ -27,6 +31,7 @@
 }
 
 %template(_string_list) std::vector< std::string >;
+%template(_double_list) std::vector< double >;
 
 %exception {
   try {

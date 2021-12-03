@@ -1,4 +1,5 @@
 #include "config.h"
+#include "query.h"
 
 #include <fstream>
 
@@ -30,8 +31,9 @@ namespace SpiceQL {
   }
 
   
-  Config::Config(json j) {
+  Config::Config(json j, string pointer) {
     config = j;
+    confPointer = pointer;
   }
 
 
@@ -41,13 +43,15 @@ namespace SpiceQL {
     }
 
     json::json_pointer p(pointer);
+    json::json_pointer pbase(confPointer);
+    pointer = (pbase / p).to_string(); 
     
-    Config conf(config[p]);
+    Config conf(config, pointer);
     return conf;
   }
 
 
-  json Config::evaluateJson(json eval_json, bool merge) {
+  json Config::evaluateJson(json eval_json) {
     resolveConfigDependencies(eval_json, config);
 
     vector<json::json_pointer> json_to_eval = SpiceQL::findKeyInJson(eval_json, "kernels", true);
@@ -55,10 +59,6 @@ namespace SpiceQL {
     for (auto pointer:json_to_eval) {
       vector<string> res = getPathsFromRegex(getDataDirectory(), eval_json[pointer]);
       eval_json[pointer] = res;
-    }
-
-    if (merge) {
-      config.merge_patch(eval_json);
     }
 
     return eval_json;
@@ -70,33 +70,96 @@ namespace SpiceQL {
   }
 
 
-  json Config::getJson(string pointer, bool merge) {
+  json Config::getRecursive(string key) {
+    vector<string> pointers = findKey(key, true);
+    json eval_json;
+    
+    for (auto &pointer : pointers) {
+      json::json_pointer p(pointer);
+      eval_json[p] = config[static_cast<json::json_pointer>(confPointer) / p];
+    }
+
+    return evaluateJson(eval_json);
+  }
+
+
+  json Config::getLatestRecursive(string key) {
+    vector<string> pointers = findKey(key, true);
+    json eval_json;
+    
+    for (auto &pointer : pointers) {
+      json::json_pointer p(pointer);
+      eval_json[p] = config[static_cast<json::json_pointer>(confPointer) / p];
+    }
+
+    json res = evaluateJson(eval_json);
+    return getLatestKernels(res);
+  }
+
+
+  json Config::get(string pointer) {
+    if (pointer == "") {
+      return evaluateJson(config[static_cast<json::json_pointer>(confPointer)]);
+    }
+
+    if (pointer.at(0) != '/') {
+      pointer = "/"+pointer; 
+    }
+
     json eval_json;
     json::json_pointer p(pointer);
 
     eval_json[p] = config[p];
 
-    return evaluateJson(eval_json, merge);
+    return evaluateJson(eval_json);
   }
 
 
-  json Config::getJson() {
-    return evaluateJson(config, true);
+  json Config::getLatest(string pointer) {
+    if (pointer == "") {
+      json res =  evaluateJson(config[static_cast<json::json_pointer>(confPointer)]);
+      return getLatestKernels(res);
+    }
+
+    if (pointer.at(0) != '/') {
+      pointer = "/"+pointer; 
+    }
+
+    json eval_json;
+    json::json_pointer p(pointer);
+
+    eval_json[p] = config[static_cast<json::json_pointer>(confPointer) / p];
+
+    json res = evaluateJson(eval_json);
+    return getLatestKernels(res);
   }
 
 
-  json Config::getRawConfig() {
-    return config;
+  json Config::get(vector<string> pointers) {
+    json eval_json;
+    
+    for (auto &pointer : pointers) {
+      json j = get(static_cast<json::json_pointer>(pointer)); 
+      eval_json.merge_patch(j);
+    }
+    return eval_json;
+  }
+
+
+  json Config::globalConf() {
+    return config[static_cast<json::json_pointer>(confPointer)];
   }
 
 
   vector<string> Config::findKey(string key, bool recursive) {
     vector<string> pointers;
-
-    for(auto &e : SpiceQL::findKeyInJson(config, key, recursive)) {
+    json subConf = config[static_cast<json::json_pointer>(confPointer)];
+    vector<json::json_pointer> ptrs = SpiceQL::findKeyInJson(subConf, key, recursive);
+    for(auto &e : ptrs) {
       pointers.push_back(e.to_string());
     }
 
     return pointers; 
   }
+
 }

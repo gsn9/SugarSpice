@@ -143,7 +143,7 @@ void IsisDataDirectory::compareKernelSets(string name) {
 
 void LroKernelSet::SetUp() {
   root = getenv("SPICEROOT");
-
+   
   // Move Clock kernels
   // TODO: Programmatic clock kernels
   lskPath = fs::path("data") / "naif0012.tls";
