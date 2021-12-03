@@ -326,3 +326,71 @@ TEST_F(IsisDataDirectory, FunctionalTestViking1Conf) {
 TEST_F(IsisDataDirectory, FunctionalTestViking2Conf) {
   compareKernelSets("viking2");
 }
+
+
+TEST_F(IsisDataDirectory, FunctionalTestMgsConf) {
+  
+  fs::path dbPath = getMissionConfigFile("mgs");
+  
+  compareKernelSets("mgs");
+
+  ifstream i(dbPath);
+  nlohmann::json conf = nlohmann::json::parse(i);
+
+  MockRepository mocks;
+  mocks.OnCallFunc(ls).Return(files);
+
+  nlohmann::json res = searchMissionKernels("doesn't matter", conf);
+
+  set<string> kernels = getKernelSet(res);
+  set<string> mission = missionMap.at("mgs");
+ 
+  // check a kernel from each regex exists in their quality groups
+  vector<string> kernelToCheck =  getKernelList(res.at("mgs").at("ck").at("reconstructed"));
+  vector<string> expected = {"mgs_sc_ab1.bc"};
+  
+  for (auto &e : expected) { 
+    auto it = find(kernelToCheck.begin(), kernelToCheck.end(), e);
+    if (it == kernelToCheck.end()) {
+      FAIL() << e << " was not found in the kernel results";
+    }
+  }
+  
+  kernelToCheck = getKernelList(res.at("mgs").at("iak")); 
+  expected = {"mocAddendum001.ti"};
+  for (auto &e : expected) { 
+    auto it = find(kernelToCheck.begin(), kernelToCheck.end(), e);
+    if (it == kernelToCheck.end()) {
+      FAIL() << e << " was not found in the kernel results";
+    }
+  }
+
+
+  kernelToCheck = getKernelList(res.at("mgs").at("ik")); 
+  expected = {"moc20.ti", "tes12.ti", "mola25.ti"};
+  for (auto &e : expected) { 
+    auto it = find(kernelToCheck.begin(), kernelToCheck.end(), e);
+    if (it == kernelToCheck.end()) {
+      FAIL() << e << " was not found in the kernel results";
+    }
+  }
+
+  kernelToCheck = getKernelList(res.at("mgs").at("sclk")); 
+  expected = {"MGS_SCLKSCET.00032.tsc"};
+  for (auto &e : expected) { 
+    auto it = find(kernelToCheck.begin(), kernelToCheck.end(), e);
+    if (it == kernelToCheck.end()) {
+      FAIL() << e << " was not found in the kernel results";
+    }
+  }
+
+  kernelToCheck = getKernelList(res.at("mgs").at("spk").at("reconstructed")); 
+  expected = {"mgs_ext24.bsp"};
+  for (auto &e : expected) { 
+    auto it = find(kernelToCheck.begin(), kernelToCheck.end(), e);
+    if (it == kernelToCheck.end()) {
+      FAIL() << e << " was not found in the kernel results";
+    }
+  }
+  
+}
