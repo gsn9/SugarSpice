@@ -66,7 +66,7 @@ namespace SpiceQL {
 
 
   unsigned int Config::size() {
-    return config.size();
+    return config[static_cast<json::json_pointer>(confPointer)].size();
   }
 
 

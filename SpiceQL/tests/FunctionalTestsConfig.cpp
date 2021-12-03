@@ -35,7 +35,7 @@ TEST_F(TestConfig, FunctionalTestConfigEval) {
   int expected_number = 4;
   ASSERT_EQ(config_eval_res[pointer].size(), expected_number);
   ASSERT_EQ(pointer_eval_res[pointer].size(), expected_number);
-  ASSERT_EQ(testConfig[pointer].size(), expected_number);
+  ASSERT_EQ(testConfig[pointer].size(), 1);
 
   pointer = "/clem1/ck/smithed/kernels"_json_pointer;
   expected_number = 1;
@@ -47,7 +47,7 @@ TEST_F(TestConfig, FunctionalTestConfigEval) {
   expected_number = 2;
   ASSERT_EQ(config_eval_res[pointer].size(), expected_number);
   ASSERT_EQ(pointer_eval_res[pointer].size(), expected_number);
-  ASSERT_EQ(testConfig[pointer].size(), expected_number);
+  ASSERT_EQ(testConfig[pointer].size(), 1);
 
   pointer = "/clem1/fk/kernels"_json_pointer;
   expected_number = 1;
@@ -59,7 +59,7 @@ TEST_F(TestConfig, FunctionalTestConfigEval) {
   expected_number = 2;
   ASSERT_EQ(config_eval_res[pointer].size(), expected_number);
   ASSERT_EQ(pointer_eval_res[pointer].size(), expected_number);
-  ASSERT_EQ(testConfig[pointer].size(), expected_number);
+  ASSERT_EQ(testConfig[pointer].size(), 1);
 
 
   pointer = "/uvvis/ik/kernels"_json_pointer;
@@ -70,7 +70,7 @@ TEST_F(TestConfig, FunctionalTestConfigEval) {
   pointer = "/uvvis/iak/kernels"_json_pointer;
   expected_number = 2;
   ASSERT_EQ(config_eval_res[pointer].size(), expected_number);
-  ASSERT_EQ(testConfig[pointer].size(), expected_number);
+  ASSERT_EQ(testConfig[pointer].size(), 1);
 }
 
 
@@ -89,7 +89,7 @@ TEST_F(TestConfig, FunctionalTestConfigGlobalEval) {
   json config_eval_res = testConfig.globalConf();
 
   json::json_pointer pointer = "/clem1/ck/reconstructed/kernels"_json_pointer;
-  int expected_number = 4;
+  int expected_number = 1;
   ASSERT_EQ(config_eval_res[pointer].size(), expected_number);
 
   pointer = "/clem1/ck/smithed/kernels"_json_pointer;
@@ -97,7 +97,7 @@ TEST_F(TestConfig, FunctionalTestConfigGlobalEval) {
   ASSERT_EQ(config_eval_res[pointer].size(), expected_number);
 
   pointer = "/clem1/spk/reconstructed/kernels"_json_pointer;
-  expected_number = 2;
+  expected_number = 1;
   ASSERT_EQ(config_eval_res[pointer].size(), expected_number);
 
   pointer = "/clem1/fk/kernels"_json_pointer;
@@ -105,7 +105,7 @@ TEST_F(TestConfig, FunctionalTestConfigGlobalEval) {
   ASSERT_EQ(config_eval_res[pointer].size(), expected_number);
 
   pointer = "/clem1/sclk/kernels"_json_pointer;
-  expected_number = 2;
+  expected_number = 1;
   ASSERT_EQ(config_eval_res[pointer].size(), expected_number);
 
   pointer = "/uvvis/ik/kernels"_json_pointer;
@@ -113,7 +113,7 @@ TEST_F(TestConfig, FunctionalTestConfigGlobalEval) {
   ASSERT_EQ(config_eval_res[pointer].size(), expected_number);
 
   pointer = "/uvvis/iak/kernels"_json_pointer;
-  expected_number = 2;
+  expected_number = 1;
   ASSERT_EQ(config_eval_res[pointer].size(), expected_number);
 }
 
