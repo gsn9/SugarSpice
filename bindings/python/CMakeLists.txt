@@ -42,6 +42,6 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/__init__.py
                ${PYSPICEQL_OUTPUT_DIR}/__init__.py
                COPYONLY)
 
-# Setup to run setup tools on install
-install(CODE "execute_process(COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/setup.py install
+# Setup to run setup tools on install 
+install(CODE "execute_process(COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/setup.py install --single-version-externally-managed --record=record.txt
                               WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})")
