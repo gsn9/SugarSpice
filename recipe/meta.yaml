@@ -27,7 +27,7 @@ test:
     - pyspiceql
   commands:
     - test -e $PREFIX/lib/libSpiceQL${SHLIB_EXT}  # [unix]
-    - test -e $PREFIX/include/SpideQL/sugar_spice.h  # [unix]
+    - test -e $PREFIX/include/SpideQL/config.h  # [unix]
     - if not exist %LIBRARY_BIN%\SpiceQL.dll exit 1  # [win]
     - if not exist %LIBRARY_LIB%\SpiceQL.lib exit 1  # [win]
 
