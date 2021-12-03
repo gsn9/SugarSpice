@@ -333,13 +333,6 @@ TEST_F(IsisDataDirectory, FunctionalTestViking1Conf) {
 
 TEST_F(IsisDataDirectory, FunctionalTestViking2Conf) {
   compareKernelSets("viking2");
-  cout << res <<endl;
-  EXPECT_EQ(res["viking2"]["ck"]["reconstructed"]["kernels"].size(), 1);
-  EXPECT_EQ(res["viking2"]["ck"]["smithed"]["kernels"].size(), 1);
-  EXPECT_EQ(res["viking2"]["fk"]["kernels"].size(), 1);
-  EXPECT_EQ(res["viking2"]["iak"]["kernels"].size(), 2);
-  EXPECT_EQ(res["viking2"]["sclk"]["kernels"].size(), 2);
-  EXPECT_EQ(res["viking2"]["spk"]["reconstructed"]["kernels"].size(), 3);
 }
 
 // test's for odyssey config
