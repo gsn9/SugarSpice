@@ -31,21 +31,21 @@ NAIF does not provide adequate resources to programmatically get all required me
 
 Issues with ISIS's approach: 
 
-* DB files are co-located with kernels and therefore cannot be released seperately from the data area.
+* DB files are co-located with kernels and therefore makes it difficult to release them seperately from the kernels.
 * Kernels are specifically tied to the ISIS data area and cannot be used directly on NAIF distributed kernels. 
 * As these DB files are in the ISIS data area, they cannot be versioned controlled seperately.
 * If you add kernels, you have to regenerate the kernel files. 
 * ISIS's code for searching and exploiting Kernels is not modularied. 
-* Kernel search works on a per-image bases
+* Kernel search works on a per-image basis and cannot be used for arbitrary SPICE queries. 
 
 SpiceQL more-or-less rewrites much of ISIS's Kernel searching and exploitation code.
 
 Distictions in SpiceQL's approach: 
 
-* DB files, here reffered to Mission config files, are located JSON files that can be shipped seperate from data installs
-* Config files leverage common Kernel naming schemes so you can use both NAIF installed kernels, but also 
+* DB files, here reffered to Mission config files, are located JSON files that can be shipped seperate from data installs.
+* Config files leverage common Kernel naming schemes so you can use both NAIF installed kernels, but also kernels from USGS Astro or any other source. 
 * Config files are source controlled.
-* If you add Kernels, you can easily modify them locally, and potentially contribute your config for the new Kernels. 
+* If you add Kernels, you can easily modify them locally, and contribute your changes for the new Kernels. 
 * Sugar Spice modularizes most of the Kernel code for search and I/O. 
 * Config files can be used for more generalized kernel queries
 
@@ -73,7 +73,7 @@ Where ``<mission>`` the name of any particular mission (mro, odyssey, messenger,
 
 Each kernel directory (ck, spk, ik, etc.) have a file called ``kernels.[0-9]{4}.db`` where ``[0-9]{4}`` is the version of the db file. As ISIS kernel metadata is not version controlled, it uses a propriatary versioning system where the 4 numbers after the first extension delimiter is a version number.  
 
-**Binary Kernel file, $ISISDATA/messenger/kernels/spk/kernels.0184.db**
+**SPK Kernel DB file, $ISISDATA/messenger/kernels/spk/kernels.0184.db**
 
 .. code-block:: text 
 
@@ -99,7 +99,7 @@ Some explinations:
 * ``Group = Dependencies`` specifies Kernels required in order to furnsh these kernels and extract meaningful data, in this case, an LSK. Usually, this is an LSK or SCLK. Sometimes includes Kernels for other reference frames. 
 * ``Group = Selection`` specifies the criteria for selecting a particular kernel, in this case, the start and stop time range, the path of the Kernel and the Kernel quality. 
 
-for binary kernels, these DB files are generally not hand written, instead the higher level information is written into a script, usually named ``makedb`` with information on required time kernels, and regexes for different kernel qualities and the kernel type. 
+For binary kernels, these DB files are generally not hand written, instead the higher level information is written into a script, usually named ``makedb`` with information on required time kernels, and regexes for different kernel qualities and the kernel type. 
 
 **Makedb script, ``$ISISDATA/messenger/kernels/spk/makedb``**
 
@@ -228,23 +228,18 @@ Things to note:
 .. code-block:: shell 
    
     <mission>.json
-     └── <Instrument> 
+     └── "<Frame>" 
           ├── "<Binary Kernel Type>:"
-          │    ├── "<Kernel Quality>:"
-          │    │    └── <list of regexes>
-          │    └── "deps:" 
-          │         ├── "sclk" 
-          │         │    └── <list of SCLKs>
-          │         ├── "lsk"
-          │         │    └── <list of LSKs> 
-          │         └── "objs"                       
-          │             └── <list of JSON paths to other json objects that act as dependencies>
-          └── "<Text Kernel Type>:"
-                └── <list of regexes> 
+          │    └── "<Kernel Quality>:"
+          │        └── <list of regexes>       
+          ├── "<Text Kernel Type>:"
+          │     └── <list of regexes> 
+          └── "deps:"
+               └── <list of json pointers> 
 
 * Kernel formats now use EMCAScript_ (i.e. regular expressions).  
 * No times are cached, these are simply computed at runtime.
-* To resolve gimbal positions, deps object ecapsulates both time kernel requirements and external kernel requirements. 
+* To resolve frame chains and dependencies on other JSON keywords, the deps object can be any arbitrary pointer to another JSON block which this frame depends on for SCLKs, CKs, etc. 
 * Instead of a configs going into a black box which resolves per image kernels, running a query returns JSON matching this format. 
 
 Example output for querying all kernels for Messenger: https://gist.github.com/Kelvinrr/3e383d62eead58c016b7165acdf64d60
@@ -255,12 +250,11 @@ The Flowchart™
 1. Identify the mission, create a new json file called <mission>.json, try to stick to NAIF abbreviations (see: https://naif.jpl.nasa.gov/pub/naif/pds/data/) 
 2. Do binary kernels first (CKs, SPKs, etc.): 
     * Look at the makedb file, translate the wildcards to EMCAScript_ and place them under their respective quality keyword 
-    * Always have a deps keyword even if empty, but realistically, there is always a LSK or SPK 
-    * If list of regexes (or any list) has only one element, feel free to write it as a string, not array
-    * Check for a config file, make sure the dependencies on other time dependent kernels are handled.  
+    * If list of regexes (or any list) has only one element, feel free to write it as a string, not an array
+    * Check for a config file, make sure the dependencies on other time dependent kernels are handled with the `deps` keyword.  
 3. When doing text kernels: 
     * Simply look at the `kernel.[0-9]{4}.db` file (specifically the newest one). Mimic the regexes into EMCAScript_ 
-    * The key is to make sure the right text kernel is going to the right instrument. 
-4. Test by creating a new gtest running `utils::searchMissionKernels` and manually confirming that all kernels are accounted for.
+    * The key is to make sure the right text kernel is going to the right instrument. For example, IKs often are sometimes instrument specific, but also can be shared by all instruments on a spacecraft.  
+4. Test by creating a new gtest running `utils::searchMissionKernels` and manually confirming that all kernels are accounted for. Looks at FunctionalTestsSpiceQueries.cpp for some examples. 
 
 .. warning:: As this library is a work in progress, testing these queries isn't 100% figured out, the long term, we will test against ISIS's kernel search and make sure we get the response. 
