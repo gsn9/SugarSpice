@@ -26,6 +26,7 @@ TEST(IoTests, UnitTestWriteCkTest) {
 }
 
 
+
 TEST(IOTests, CreateSPKSegmentTest) {
   std::string comment = "This is a comment for \n a test SPK segment";
   int body = 1;
@@ -67,7 +68,7 @@ TEST(IoTests, WriteSPKSegmentTest) {
 }
 
 
-TEST(IoTests, writeTextKernelTest) { 
+TEST(UnitTest, WriteTextKernel) { 
   fs::path tpath = static_cast<fs::path>(getenv("SPICEROOT")) / "test_ik.ti";
 
   nlohmann::json j = {
@@ -90,4 +91,33 @@ TEST(IoTests, writeTextKernelTest) {
   ASSERT_EQ(nlohmann::json::diff(j, j2), nlohmann::json::array());
 }
 
+
+TEST(UnitTest, WriteTextKernelArrayAppend) { 
+  // NAIF_BODY_CODE can be defined in multiple kernels, if and multiple kernels 
+  // are furnished, the kernels should not overwrite the array but append to it instead.
+  fs::path tpath1 = static_cast<fs::path>(getenv("SPICEROOT")) / "test_ik1.ti";
+  fs::path tpath2 = static_cast<fs::path>(getenv("SPICEROOT")) / "test_ik2.ti";
+  
+  nlohmann::json j = {
+    {"NAIF_BODY_NAME", {"body", "instrument1", "instrument2"}},
+    {"NAIF_BODY_CODE", {-90, -90101, -90102}}
+  }; 
+
+  writeTextKernel(tpath1, "ik", j, "This is a IK kernel");
+
+  j["NAIF_BODY_NAME"] = {"planet", "instrument3"};
+  j["NAIF_BODY_CODE"] = {10, -90103};
+ 
+  writeTextKernel(tpath2, "ik", j, "This one is different");
+
+  // furnsh the new kernel
+  Kernel k1(tpath1);
+  Kernel k2(tpath2);
+
+  EXPECT_EQ(Kernel::translateFrame("body"), -90);
+  EXPECT_EQ(Kernel::translateFrame("planet"), 10);
+  EXPECT_EQ(Kernel::translateFrame("instrument1"), -90101);
+  EXPECT_EQ(Kernel::translateFrame("instrument2"), -90102);
+  EXPECT_EQ(Kernel::translateFrame("instrument3"), -90103);
+}
 

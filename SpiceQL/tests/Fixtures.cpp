@@ -228,7 +228,9 @@ void LroKernelSet::SetUp() {
     {"FRAME_-85620_CENTER", -85},
     {"TKFRAME_-85620_RELATIVE", "LRO_SC_BUS"},
     {"CK_-85620_SCLK", -85},
-    {"CK_-85620_SPK", -85}
+    {"CK_-85620_SPK", -85},
+    {"NAIF_BODY_NAME", {"LRO", "LUNAR RECONNAISSANCE ORBITER", "LRO_LROCWAC", "LRO_LROCNACL", "LRO_LROCNACR"}},
+    {"NAIF_BODY_CODE", {-85, -85, -85620, -85600, -85610}}
   };
 
   fkPath = root / "fk" / "lro_frames_1111111_v01.tf";
