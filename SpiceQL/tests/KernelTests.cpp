@@ -11,11 +11,6 @@
 using namespace SpiceQL;
 
 TEST_F(LroKernelSet, UnitTestTranslateFrame) {
-  // Get FKs, just load all of them, whatever 
-  Config c;
-  nlohmann::json j = c.getLatestRecursive("fk");
-  KernelSet kset(j);
-
   int res = Kernel::translateFrame("LRO_LROCWAC");
   EXPECT_EQ(res, -85620);
 }

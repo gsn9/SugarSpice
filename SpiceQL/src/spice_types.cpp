@@ -87,6 +87,12 @@ namespace SpiceQL {
     SpiceInt code;
     SpiceBoolean found;
 
+    // Get FKs 
+    // load all latest quntil we can get smarter about it
+    Config c;
+    json j = c.getLatestRecursive("fk");
+    KernelSet kset(j);
+
     bodn2c_c(frame.c_str(), &code, &found);
 
     if (!found) {
