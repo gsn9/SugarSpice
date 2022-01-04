@@ -256,5 +256,6 @@ The Flowchart™
     * Simply look at the `kernel.[0-9]{4}.db` file (specifically the newest one). Mimic the regexes into EMCAScript_ 
     * The key is to make sure the right text kernel is going to the right instrument. For example, IKs often are sometimes instrument specific, but also can be shared by all instruments on a spacecraft.  
 4. Test by creating a new gtest running `utils::searchMissionKernels` and manually confirming that all kernels are accounted for. Looks at FunctionalTestsSpiceQueries.cpp for some examples. 
-
+5. Add new config files to CMakeLists.txt's SPICEQL_CONFIG_FILES variable to make sure they get installed. 
+ 
 .. warning:: As this library is a work in progress, testing these queries isn't 100% figured out, the long term, we will test against ISIS's kernel search and make sure we get the response. 
