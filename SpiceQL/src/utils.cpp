@@ -6,13 +6,16 @@
 
 #include <exception>
 #include <fstream>
-#include <optional>
 
 #include <SpiceUsr.h>
 #include <SpiceZfc.h>
 #include <SpiceZmc.h>
 
 #include <ghc/fs_std.hpp>
+
+#include <fmt/chrono.h>
+#include <fmt/format.h>
+#include <fmt/compile.h>
 
 #include <nlohmann/json.hpp>
 

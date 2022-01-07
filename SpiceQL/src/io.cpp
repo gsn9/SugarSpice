@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
-#include <optional>
+
+#include <fmt/format.h>
 
 #include "SpiceUsr.h"
 

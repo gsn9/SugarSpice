@@ -10,6 +10,7 @@ list(APPEND CMAKE_SWIG_FLAGS "-py3;-DPY3")
 find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
 
 # Setup for wrapper library
+set(PYSPICEQL_OUTPUT_DIR "${CMAKE_CURRENT_BINARY_DIR}/pyspiceql")
 set(PYSPICEQL_SOURCES pyspiceql.i
                       config.i
                       io.i
@@ -19,20 +20,28 @@ set(PYSPICEQL_SOURCES pyspiceql.i
 set_source_files_properties(${PYSPICEQL_SOURCES} PROPERTIES CPLUSPLUS ON)
 swig_add_library(pyspiceql
                  LANGUAGE python
-                 SOURCES ${PYSPICEQL_SOURCES})
+                 SOURCES ${PYSPICEQL_SOURCES}
+                 OUTPUT_DIR ${PYSPICEQL_OUTPUT_DIR})
 swig_link_libraries(pyspiceql SpiceQL Python3::Module)
-set_property(TARGET pyspiceql PROPERTY SWIG_USE_TARGET_INCLUDE_DIRECTORIES TRUE)
+set_target_properties(pyspiceql PROPERTIES SWIG_USE_TARGET_INCLUDE_DIRECTORIES TRUE)
+set_target_properties(pyspiceql PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${PYSPICEQL_OUTPUT_DIR})
 
 # Setup for wrapper tests
 if(SPICEQL_BUILD_TESTS)
     add_test(NAME python-tests
         COMMAND python -m pytest ${CMAKE_CURRENT_SOURCE_DIR}/tests
-        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+        WORKING_DIRECTORY ${PYSPICEQL_OUTPUT_DIR})
 else()
     message(STATUS "Skipping Python Bindings Tests")
 endif()
 
-# Install the Python wrapper
-set_target_properties(pyspiceql PROPERTIES INSTALL_RPATH ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR})
-install(TARGETS pyspiceql DESTINATION ${Python3_SITEARCH})
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/pyspiceql.py DESTINATION ${Python3_SITEARCH})
+# Create the files to install the Python wrapper
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/setup.py.in
+               ${CMAKE_CURRENT_BINARY_DIR}/setup.py)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/__init__.py
+               ${PYSPICEQL_OUTPUT_DIR}/__init__.py
+               COPYONLY)
+
+# Setup to run setup tools on install 
+install(CODE "execute_process(COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/setup.py install --single-version-externally-managed --record=record.txt
+                              WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})")

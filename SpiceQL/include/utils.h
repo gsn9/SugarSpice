@@ -9,10 +9,6 @@
 #include <regex>
 #include <optional>
 
-#include <fmt/chrono.h>
-#include <fmt/format.h>
-#include <fmt/compile.h>
-
 #include <nlohmann/json.hpp>
 
 #include "spice_types.h"

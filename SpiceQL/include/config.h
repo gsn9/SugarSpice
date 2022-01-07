@@ -2,7 +2,6 @@
 
 #include <iostream>
 #include <regex>
-#include <optional>
 
 #include <nlohmann/json.hpp>
 
