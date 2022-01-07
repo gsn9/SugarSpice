@@ -87,10 +87,16 @@ namespace SpiceQL {
     SpiceInt code;
     SpiceBoolean found;
 
+    // Get FKs 
+    // load all latest quntil we can get smarter about it
+    Config c;
+    json j = c.getLatestRecursive("fk");
+    KernelSet kset(j);
+
     bodn2c_c(frame.c_str(), &code, &found);
 
     if (!found) {
-      throw "Frame name not Found";
+      throw invalid_argument(fmt::format("Frame code for frame name \"{}\" not Found", frame));
     }
 
     return code;
@@ -98,7 +104,7 @@ namespace SpiceQL {
 
 
   string Kernel::translateFrame(int frame) {
-    KernelPool::getInstance();    
+    KernelPool::getInstance(); 
 
     SpiceChar name[128];
     SpiceBoolean found;
@@ -106,7 +112,7 @@ namespace SpiceQL {
     bodc2n_c(frame, 128, name, &found);
 
     if(!found) {
-      throw "Frame Code not found";
+      throw invalid_argument(fmt::format("Frame name for code {} not Found", frame));
     }
 
     return string(name);

@@ -66,7 +66,8 @@ namespace SpiceQL {
 
 
   unsigned int Config::size() {
-    return config.size();
+    json::json_pointer cpointer(confPointer);
+    return config[cpointer].size();
   }
 
 
@@ -76,7 +77,8 @@ namespace SpiceQL {
     
     for (auto &pointer : pointers) {
       json::json_pointer p(pointer);
-      eval_json[p] = config[static_cast<json::json_pointer>(confPointer) / p];
+      json::json_pointer cpointer(confPointer);
+      eval_json[p] = config[cpointer / p];
     }
 
     return evaluateJson(eval_json);
@@ -89,7 +91,8 @@ namespace SpiceQL {
     
     for (auto &pointer : pointers) {
       json::json_pointer p(pointer);
-      eval_json[p] = config[static_cast<json::json_pointer>(confPointer) / p];
+      json::json_pointer cpointer(confPointer);
+      eval_json[p] = config[cpointer / p];
     }
 
     json res = evaluateJson(eval_json);
@@ -98,8 +101,10 @@ namespace SpiceQL {
 
 
   json Config::get(string pointer) {
+    json::json_pointer cpointer(confPointer);
+
     if (pointer == "") {
-      return evaluateJson(config[static_cast<json::json_pointer>(confPointer)]);
+      return evaluateJson(config[cpointer]);
     }
 
     if (pointer.at(0) != '/') {
@@ -116,8 +121,10 @@ namespace SpiceQL {
 
 
   json Config::getLatest(string pointer) {
+    json::json_pointer cpointer(confPointer);
+
     if (pointer == "") {
-      json res =  evaluateJson(config[static_cast<json::json_pointer>(confPointer)]);
+      json res =  evaluateJson(config[cpointer]);
       return getLatestKernels(res);
     }
 
@@ -128,7 +135,7 @@ namespace SpiceQL {
     json eval_json;
     json::json_pointer p(pointer);
 
-    eval_json[p] = config[static_cast<json::json_pointer>(confPointer) / p];
+    eval_json[p] = config[cpointer / p];
 
     json res = evaluateJson(eval_json);
     return getLatestKernels(res);
@@ -137,9 +144,10 @@ namespace SpiceQL {
 
   json Config::get(vector<string> pointers) {
     json eval_json;
-    
+    json::json_pointer cpointer(confPointer);
+
     for (auto &pointer : pointers) {
-      json j = get(static_cast<json::json_pointer>(pointer)); 
+      json j = get(cpointer); 
       eval_json.merge_patch(j);
     }
     return eval_json;
@@ -147,13 +155,16 @@ namespace SpiceQL {
 
 
   json Config::globalConf() {
-    return config[static_cast<json::json_pointer>(confPointer)];
+    json::json_pointer cpointer(confPointer);
+    return config[cpointer];
   }
 
 
   vector<string> Config::findKey(string key, bool recursive) {
+    json::json_pointer cpointer(confPointer);
+
     vector<string> pointers;
-    json subConf = config[static_cast<json::json_pointer>(confPointer)];
+    json subConf = config[cpointer];
     vector<json::json_pointer> ptrs = SpiceQL::findKeyInJson(subConf, key, recursive);
     for(auto &e : ptrs) {
       pointers.push_back(e.to_string());
