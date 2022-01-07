@@ -328,28 +328,6 @@ TEST_F(IsisDataDirectory, FunctionalTestViking2Conf) {
 }
 
 
-// test's for odyssey config
-TEST_F(KernelDataDirectories, FunctionalTestSearchMissionKernelsOdyssey) {
-  fs::path dbPath = getMissionConfigFile("odyssey");
-
-  ifstream i(dbPath);
-  nlohmann::json conf;
-  i >> conf;
-
-  MockRepository mocks;
-  mocks.OnCallFunc(ls).Return(paths);
-
-  nlohmann::json res = searchMissionKernels("/isis_data/", conf);
-  EXPECT_EQ(res["odyssey"]["ck"]["reconstructed"]["kernels"].size(), 11);
-  EXPECT_EQ(res["odyssey"]["ck"]["smithed"]["kernels"].size(), 2);
-  EXPECT_EQ(res["odyssey"]["fk"]["kernels"].size(), 2);
-  EXPECT_EQ(res["odyssey"]["iak"]["kernels"].size(), 1);
-  EXPECT_EQ(res["odyssey"]["sclk"]["kernels"].size(), 1); 
-  EXPECT_EQ(res["odyssey"]["spk"]["predicted"]["kernels"].size(), 1);
-  EXPECT_EQ(res["odyssey"]["spk"]["smithed"]["kernels"].size(), 2);
-  EXPECT_EQ(res["odyssey"]["spk"]["reconstructed"]["kernels"].size(), 7);
-}
-
 TEST_F(IsisDataDirectory, FunctionalTestMgsConf) {
   
   fs::path dbPath = getMissionConfigFile("mgs");
@@ -414,5 +392,52 @@ TEST_F(IsisDataDirectory, FunctionalTestMgsConf) {
       FAIL() << e << " was not found in the kernel results";
     }
   }
- 
+}
+
+TEST_F(IsisDataDirectory, FunctionalTestOdysseyConf) {
+  fs::path dbPath = getMissionConfigFile("odyssey");
+  
+  compareKernelSets("odyssey");
+
+  ifstream i(dbPath);
+  nlohmann::json conf = nlohmann::json::parse(i);
+
+  MockRepository mocks;
+  mocks.OnCallFunc(ls).Return(files);
+
+  nlohmann::json res = searchMissionKernels("doesn't matter", conf);
+
+  set<string> kernels = getKernelSet(res);
+  set<string> mission = missionMap.at("odyssey");
+
+  vector<string> expected = {"m01_sc_ab0110.bc", 
+                             "m01_sc_map3_rec_nadir.bc", 
+                             "m01_sc_map10_rec_nadir.bc", 
+                             "m01_sc_map1_v2.bc",
+                             "m01_sc_map10.bc",
+                             "m01_sc_ext7_rec_nadir.bc",
+                             "m01_sc_ext36_rec_nadir.bc",
+                             "m01_sc_ext22_rec_roto_v2.bc",
+                             "m01_sc_ext7.bc",
+                             "m01_sc_ext42.bc"};
+  CompareKernelSets(getKernelList(res.at("odyssey").at("ck").at("reconstructed")), expected); 
+
+  expected = {"themis_nightir_merged_2018Mar02_ck.bc", 
+              "themis_dayir_merged_2018Jul13_ck.bc"};
+  CompareKernelSets(getKernelList(res.at("odyssey").at("ck").at("smithed")), expected); 
+  
+  expected = {"m01_map.bsp"};
+  CompareKernelSets(getKernelList(res.at("odyssey").at("spk").at("predicted")), expected);  
+  
+  expected = {"m01_ab_v2.bsp", 
+              "m01_map1_v2.bsp",
+              "m01_map2.bsp",
+              "m01_ext8.bsp",
+              "m01_ext23.bsp",
+              "m01_map_rec.bsp"};
+  CompareKernelSets(getKernelList(res.at("odyssey").at("spk").at("reconstructed")), expected); 
+
+  expected = {"themis_nightir_merged_2018Mar02_spk.bsp", 
+              "themis_dayir_merged_2018Jul13_spk.bsp"};
+  CompareKernelSets(getKernelList(res.at("odyssey").at("spk").at("smithed")), expected);  
 }

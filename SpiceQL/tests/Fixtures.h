@@ -33,6 +33,7 @@ class IsisDataDirectory : public ::testing::Test {
     void SetUp() override;
     void TearDown() override; 
     void compareKernelSets(string name);
+    void CompareKernelSets(vector<string> kVector, vector<string> expectedSubSet);
 };
 
 class KernelDataDirectories : public ::testing::Test  {

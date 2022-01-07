@@ -3248,13 +3248,13 @@
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext56.bc
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_map10.bc
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext12.bc
-/usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext25_rec_roto.bc
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext44_rec_nadir.bc
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext11_rec_nadir.bc
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext47_rec_nadir.bc
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext66_rec_nadir.bc
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext1.bc
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext27.bc
+/usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext22_rec_roto_v2.bc
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext7_rec_nadir.bc
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext6_rec_nadir.bc
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext36_rec_nadir.bc
@@ -3289,14 +3289,12 @@
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext33.bc
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_map5_rec_nadir.bc
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_map2.bc
-/usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_map_rec_nadir.bc
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_map5.bc
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext66.bc
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext17.bc
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext60_rec_nadir.bc
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext29.bc
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ab0110.bc
-/usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext19_rec_roto.bc
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext43_rec_nadir.bc
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext28_rec_nadir.bc
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext28.bc
@@ -3310,7 +3308,6 @@
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext21_rec_nadir.bc
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext48_rec_nadir.bc
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_map11.bc
-/usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext23_v2.bc
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext16_rec_nadir.bc
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext4.bc
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext53_rec_nadir.bc
@@ -3336,7 +3333,6 @@
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext14_rec_nadir.bc
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/themis_nightir_merged_2018Mar02_ck.bc
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ab0201.bc
-/usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext45_rec_roto.bc
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext2.bc
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_map7.bc
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext26.bc
@@ -3351,7 +3347,6 @@
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext36.bc
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext5_rec_nadir.bc
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext52_rec_nadir.bc
-/usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext46_rec_roto.bc
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext38.bc
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext56_rec_nadir.bc
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext22_rec_nadir.bc
@@ -3361,7 +3356,6 @@
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext34_rec_nadir.bc
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext43.bc
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_map1_v2.bc
-/usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext48_rec_roto.bc
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext6.bc
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext27_rec_nadir.bc
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ab0112.bc
@@ -3389,7 +3383,6 @@
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext68.bc
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext15_rec_nadir.bc
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext59_rec_nadir.bc
-/usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext18_rec_roto_v2.bc
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_map8_rec_nadir.bc
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext29_rec_nadir.bc
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext51.bc
@@ -3397,7 +3390,6 @@
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext14.bc
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext48.bc
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext63_rec_nadir.bc
-/usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_map_nadir.bc
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext17_rec_nadir.bc
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_ext47.bc
 /usgs/cpkgs/isis3/isis_data/odyssey/kernels/ck/m01_sc_map9.bc
