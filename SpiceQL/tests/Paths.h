@@ -271,3 +271,4 @@ std::vector<std::string> viking2_paths = {
     "isis_data/viking2/kernels/spk/vo2_recon.bsp",
     "isis_data/viking2/kernels/spk/vo2_sedr.bsp",
 };
+

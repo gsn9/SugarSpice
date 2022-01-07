@@ -76,8 +76,6 @@ void KernelDataDirectories::TearDown() { }
 
 
 void IsisDataDirectory::SetUp() { 
-  
-
   base = "";
 
   ifstream infile("data/isisKernelList.txt");
@@ -132,14 +130,23 @@ void IsisDataDirectory::compareKernelSets(string name) {
   set_difference(expectedKernels.begin(), expectedKernels.end(), kernels.begin(), kernels.end(), inserter(diff, diff.begin()));
   
   if (diff.size() != 0) {
-    FAIL() << "Kernel sets are not equal, diff: " << fmt::format("{}", fmt::join(diff, " ")) << endl;
+    FAIL() << "Kernel sets are not equal, expected - retrieved diff: " << fmt::format("{}", fmt::join(diff, " ")) << endl;
   }
   
   set_difference(kernels.begin(), kernels.end(), expectedKernels.begin(), expectedKernels.end(), inserter(diff, diff.begin()));
   if (diff.size() != 0) {
-    FAIL() << "Kernel sets are not equal, diff: " << fmt::format("{}", fmt::join(diff, " ")) << endl;
+    FAIL() << "Kernel sets are not equal, retrieved - expected diff: " << fmt::format("{}", fmt::join(diff, " ")) << endl;
   }
+}
 
+
+void IsisDataDirectory::CompareKernelSets(vector<string> kVector, vector<string> expectedSubSet) {
+  for (auto &e : kVector) { 
+    auto it = find(kVector.begin(), kVector.end(), e);
+    if (it == kVector.end()) {
+      FAIL() << e << " was not found in the kernel results";
+    }
+  }
 }
 
 
