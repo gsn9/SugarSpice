@@ -285,8 +285,7 @@ namespace SpiceQL {
     for(auto it = keywords.begin(); it != keywords.end(); it++) {
 
       if (it.value().is_array()) {
-        textKernel << fmt::format("{} = {}",  it.key(), json2String(it.value().at(0), MAX_TEXT_KERNEL_LINE_LEN - it.key().size() + 5)) << endl;
-        for(auto ar = it.value().begin()+1; ar!=it.value().end();ar++) {
+        for(auto ar = it.value().begin(); ar!=it.value().end();ar++) {
           textKernel << fmt::format("{} += {}", it.key(), json2String(ar.value(),  MAX_TEXT_KERNEL_LINE_LEN - it.key().size() + 5)) << endl;
         }
       }

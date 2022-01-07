@@ -12,7 +12,7 @@ using json = nlohmann::json;
 using namespace SpiceQL;
 
 TEST_F(TestConfig, FunctionalTestConfigConstruct) {
-  json megaConfig = testConfig.getRawConfig();
+  json megaConfig = testConfig.globalConf();
 
   ASSERT_EQ(megaConfig.size(), 26);
 }
@@ -28,14 +28,14 @@ TEST_F(TestConfig, FunctionalTestConfigEval) {
   mocks.OnCallFunc(ls).Return(paths);
   mocks.OnCallFunc(getDataDirectory).Return("/isis_data/");
 
-  json config_eval_res = testConfig.getJson();
-  json pointer_eval_res = testConfig.getJson("/clem1", true);
+  json config_eval_res = testConfig.get();
+  json pointer_eval_res = testConfig.get("/clem1");
 
   json::json_pointer pointer = "/clem1/ck/reconstructed/kernels"_json_pointer;
   int expected_number = 4;
   ASSERT_EQ(config_eval_res[pointer].size(), expected_number);
   ASSERT_EQ(pointer_eval_res[pointer].size(), expected_number);
-  ASSERT_EQ(testConfig[pointer].size(), expected_number);
+  ASSERT_EQ(testConfig[pointer].size(), 1);
 
   pointer = "/clem1/ck/smithed/kernels"_json_pointer;
   expected_number = 1;
@@ -47,7 +47,7 @@ TEST_F(TestConfig, FunctionalTestConfigEval) {
   expected_number = 2;
   ASSERT_EQ(config_eval_res[pointer].size(), expected_number);
   ASSERT_EQ(pointer_eval_res[pointer].size(), expected_number);
-  ASSERT_EQ(testConfig[pointer].size(), expected_number);
+  ASSERT_EQ(testConfig[pointer].size(), 1);
 
   pointer = "/clem1/fk/kernels"_json_pointer;
   expected_number = 1;
@@ -59,7 +59,7 @@ TEST_F(TestConfig, FunctionalTestConfigEval) {
   expected_number = 2;
   ASSERT_EQ(config_eval_res[pointer].size(), expected_number);
   ASSERT_EQ(pointer_eval_res[pointer].size(), expected_number);
-  ASSERT_EQ(testConfig[pointer].size(), expected_number);
+  ASSERT_EQ(testConfig[pointer].size(), 1);
 
 
   pointer = "/uvvis/ik/kernels"_json_pointer;
@@ -70,7 +70,7 @@ TEST_F(TestConfig, FunctionalTestConfigEval) {
   pointer = "/uvvis/iak/kernels"_json_pointer;
   expected_number = 2;
   ASSERT_EQ(config_eval_res[pointer].size(), expected_number);
-  ASSERT_EQ(testConfig[pointer].size(), expected_number);
+  ASSERT_EQ(testConfig[pointer].size(), 1);
 }
 
 
@@ -85,11 +85,11 @@ TEST_F(TestConfig, FunctionalTestConfigGlobalEval) {
   mocks.OnCallFunc(ls).Return(paths);
   mocks.OnCallFunc(getDataDirectory).Return("/isis_data/");
 
-  testConfig.getJson();
-  json config_eval_res = testConfig.getRawConfig();
+  testConfig.get();
+  json config_eval_res = testConfig.globalConf();
 
   json::json_pointer pointer = "/clem1/ck/reconstructed/kernels"_json_pointer;
-  int expected_number = 4;
+  int expected_number = 1;
   ASSERT_EQ(config_eval_res[pointer].size(), expected_number);
 
   pointer = "/clem1/ck/smithed/kernels"_json_pointer;
@@ -97,7 +97,7 @@ TEST_F(TestConfig, FunctionalTestConfigGlobalEval) {
   ASSERT_EQ(config_eval_res[pointer].size(), expected_number);
 
   pointer = "/clem1/spk/reconstructed/kernels"_json_pointer;
-  expected_number = 2;
+  expected_number = 1;
   ASSERT_EQ(config_eval_res[pointer].size(), expected_number);
 
   pointer = "/clem1/fk/kernels"_json_pointer;
@@ -105,7 +105,7 @@ TEST_F(TestConfig, FunctionalTestConfigGlobalEval) {
   ASSERT_EQ(config_eval_res[pointer].size(), expected_number);
 
   pointer = "/clem1/sclk/kernels"_json_pointer;
-  expected_number = 2;
+  expected_number = 1;
   ASSERT_EQ(config_eval_res[pointer].size(), expected_number);
 
   pointer = "/uvvis/ik/kernels"_json_pointer;
@@ -113,7 +113,7 @@ TEST_F(TestConfig, FunctionalTestConfigGlobalEval) {
   ASSERT_EQ(config_eval_res[pointer].size(), expected_number);
 
   pointer = "/uvvis/iak/kernels"_json_pointer;
-  expected_number = 2;
+  expected_number = 1;
   ASSERT_EQ(config_eval_res[pointer].size(), expected_number);
 }
 
@@ -124,8 +124,8 @@ TEST_F(TestConfig, FunctionalTestConfigAccessors) {
   MockRepository mocks; 
   mocks.OnCallFunc(SpiceQL::ls).Return(paths);
 
-  EXPECT_EQ(base.getJson()["lsk"]["kernels"].at(0), "/isis_data/base/kernels/sclk/naif0001.tls");
-  EXPECT_EQ(base_pointer.getJson()["lsk"]["kernels"].at(0), "/isis_data/base/kernels/sclk/naif0001.tls");
+  EXPECT_EQ(base.get()["lsk"]["kernels"].at(0), "/isis_data/base/kernels/sclk/naif0001.tls");
+  EXPECT_EQ(base_pointer.get()["lsk"]["kernels"].at(0), "/isis_data/base/kernels/sclk/naif0001.tls");
 }
 
 TEST_F(TestConfig, FunctionalTestsConfigKeySearch) {

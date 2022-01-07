@@ -6,8 +6,7 @@
             },
             "smithed" : {
               "kernels" : "msgr_mdis_sc[0-9]{4}_usgs_v[0-9]{1}.bc"
-            },
-            "deps" : ["/mess/ck", "/mdis_att/ck"]
+            }
         },
         "spk" : {
             "reconstructed" : {
@@ -30,7 +29,8 @@
           "na" : {
             "kernels" : "pck00010_msgr_v[0-9]{2}.tpc"
           }
-        }
+        },
+        "deps" : ["/mdis_att", "/mess"] 
     },
     "mdis_att" : {
         "ck" : {

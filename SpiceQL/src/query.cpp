@@ -236,6 +236,7 @@ namespace SpiceQL {
     return kernels;
   }
 
+
   json searchMissionKernels(json conf) {
     fs::path root = getDataDirectory();
     return searchMissionKernels(root, conf);

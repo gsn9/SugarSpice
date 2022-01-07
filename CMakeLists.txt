@@ -55,7 +55,17 @@ if(SPICEQL_BUILD_LIB)
                               ${CMAKE_CURRENT_SOURCE_DIR}/SpiceQL/db/galileo.json
                               ${CMAKE_CURRENT_SOURCE_DIR}/SpiceQL/db/lro.json
                               ${CMAKE_CURRENT_SOURCE_DIR}/SpiceQL/db/mess.json
-                              ${CMAKE_CURRENT_SOURCE_DIR}/SpiceQL/db/juno.json)
+                              ${CMAKE_CURRENT_SOURCE_DIR}/SpiceQL/db/juno.json
+                              ${CMAKE_CURRENT_SOURCE_DIR}/SpiceQL/db/apollo16.json
+                              ${CMAKE_CURRENT_SOURCE_DIR}/SpiceQL/db/apollo17.json
+                              ${CMAKE_CURRENT_SOURCE_DIR}/SpiceQL/db/base.json
+                              ${CMAKE_CURRENT_SOURCE_DIR}/SpiceQL/db/cassini.json
+                              ${CMAKE_CURRENT_SOURCE_DIR}/SpiceQL/db/mro.json
+                              ${CMAKE_CURRENT_SOURCE_DIR}/SpiceQL/db/viking1.json
+                              ${CMAKE_CURRENT_SOURCE_DIR}/SpiceQL/db/viking2.json)
+
+  
+  set(SPICEQL_KERNELS ${CMAKE_CURRENT_SOURCE_DIR}/SpiceQL/db/kernels/naif0011.tls)
 
   add_library(SpiceQL SHARED ${SPICEQL_SRC_FILES})
 
@@ -98,6 +108,10 @@ if(SPICEQL_BUILD_LIB)
 
   # Install the json db files
   install(FILES ${SPICEQL_CONFIG_FILES} DESTINATION "etc/SpiceQL/db")
+
+  # Install the shipped kernels
+  install(FILES ${SPICEQL_KERNELS} DESTINATION "etc/SpiceQL/db/kernels")
+
 
   # Install the library
   install(TARGETS SpiceQL nlohmann_json

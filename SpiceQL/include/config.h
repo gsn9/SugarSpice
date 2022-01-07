@@ -57,29 +57,83 @@ namespace SpiceQL {
 
 
       /**
-       * @brief Given a conf json object, expands the regeexes to paths 
+       * @brief get kernel lists from key 
        * 
-       * @param pointer Json key or pointer to expand
-       * @param merge if true, merges with the internal 
-       * @return nlohmann::json 
+       * Returns a sub group of the JSON where regexes are 
+       * expanded into file lists. 
+       *
+       * @param pointers key or JSON pointer to subgroup on 
+       * @return nlohmann::json merged JSON 
        */
-      nlohmann::json getJson(std::string pointer, bool merge=false);
+      nlohmann::json get(std::string pointer = "");
 
 
       /**
-       * @brief returns the kernels 
+       * @brief get kernel lists from key vector
        * 
-       * @return nlohmann::json 
+       * Returns a sub group of the JSON where regexes are 
+       * expanded into file lists. For each key in the vector, 
+       * the resulting JSON is merged into a single json object. 
+       *
+       * @param pointers list of keys or JSON pointer to subgroup on 
+       * @return nlohmann::json merged JSON 
        */
-      nlohmann::json getJson();
+      nlohmann::json get(std::vector<std::string> pointers);
+
+
+      /**
+       * @brief get kernel list from all instances of a key 
+       *
+       * Searches recursively for all instances of the input key 
+       * and returns a new merged JSON object with values of the 
+       * JSON where regexes are expanded into file lists. 
+       *
+       * @param pointer key or JSON pointer to recursively subgroup on 
+       * @return nlohmann::json json subgroup with kernels 
+       */
+      nlohmann::json getRecursive(std::string pointer);
+
+
+      /**
+       * @brief get kernel list from all instances of a key but only returns the latest version of each kernel. 
+       *
+       * Searches recursively for all instances of the input key 
+       * and returns a new merged JSON object with values of the 
+       * JSON where regexes are expanded into file lists containing only
+       * the latest kernel versions. For example, insted of a list of all IK 
+       * kernels you would get the IK with the latest v??? string or similar 
+       * according to how a specific set of kernels are versioned. 
+       *
+       * @param pointer key or JSON pointer to recursively subgroup on 
+       * @return nlohmann::json json subgroup with kernels 
+       */
+      nlohmann::json getLatestRecursive(std::string pointer);
+
+
+      /**
+       * @brief get kernel lists from key but only returns the latest version of each kernel.  
+       * 
+       * Returns a sub group of the JSON where regexes are 
+       * expanded into file lists containing only
+       * the latest kernel versions. For example, insted of a list of all IK 
+       * kernels you would get the IK with the latest v??? string or similar 
+       * according to how a specific set of kernels are versioned. 
+       *
+       * @param pointers key or JSON pointer to subgroup on 
+       * @return nlohmann::json new JSON subgroup with latest kernels 
+       */
+      nlohmann::json getLatest(std::string pointer = "");
 
 
       /**
        * @brief Get the Global Json object
        * 
-       * @return nlohmann::json 
+       * The global JSON object represents the current SpiceQL 
+       * config for all frames.  
+       *
+       * @return nlohmann::json the config file
        */
-      nlohmann::json getRawConfig();
+      nlohmann::json globalConf();
 
 
       /**
@@ -98,7 +152,7 @@ namespace SpiceQL {
        * 
        * @param json json object representing a target config
        */
-      Config(nlohmann::json json);
+      Config(nlohmann::json json, std::string pointer);
 
 
       /**
@@ -108,11 +162,14 @@ namespace SpiceQL {
        * @param merge if true, merges with the internal 
        * @return nlohmann::json 
        */
-      nlohmann::json evaluateJson(nlohmann::json eval_json, bool merge=false);
+      nlohmann::json evaluateJson(nlohmann::json eval_json);
 
 
       //! internal json config
       nlohmann::json config;
+
+      //! pointer to the sub conf that the user is interacting with
+      std::string confPointer;
   };
 
 }

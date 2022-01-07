@@ -1,5 +1,6 @@
 %module(package="pyspiceql") query
 
+
 %{
   #include "query.h"
 %}

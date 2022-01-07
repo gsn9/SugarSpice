@@ -326,4 +326,14 @@ namespace SpiceQL {
    * @returns double precision ephemeris time
    **/
   double utcToEt(std::string et);
+
+
+  /**
+   * @brief 
+   * 
+   * @param mission 
+   * @param sclk 
+   * @return double 
+   */
+  double sclkToEt(std::string mission, std::string sclk);
 }
