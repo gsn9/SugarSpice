@@ -10488,11 +10488,7 @@
 /usgs/cpkgs/isis3/isis_data/kaguya/kernels/sclk/SEL_M_V01.TSC
 /usgs/cpkgs/isis3/isis_data/kaguya/kernels/pck/moon_assoc_me.tf
 /usgs/cpkgs/isis3/isis_data/kaguya/kernels/pck/moon_080317.tf
-/usgs/cpkgs/isis3/isis_data/kaguya/kernels/ik/SEL_SP_V01.TI
 /usgs/cpkgs/isis3/isis_data/kaguya/kernels/ik/SEL_MI_V01.TI
-/usgs/cpkgs/isis3/isis_data/kaguya/kernels/ik/SEL_HDTV_V01.TI
-/usgs/cpkgs/isis3/isis_data/kaguya/kernels/ik/SEL_LALT_V01.TI
-/usgs/cpkgs/isis3/isis_data/kaguya/kernels/ik/SEL_XRS_V01.TI
 /usgs/cpkgs/isis3/isis_data/kaguya/kernels/ik/SEL_TC_V01.TI
 /usgs/cpkgs/isis3/isis_data/kaguya/kernels/iak/kaguyaTcAddendum001.ti
 /usgs/cpkgs/isis3/isis_data/kaguya/kernels/iak/kaguyaTcAddendum004.ti
@@ -10505,7 +10501,6 @@
 /usgs/cpkgs/isis3/isis_data/kaguya/kernels/spk/SEL_M_071020_081226_SGMI_05.BSP
 /usgs/cpkgs/isis3/isis_data/kaguya/kernels/spk/SELMAINGRGM900CL660DIRALT2008103020090610.bsp
 /usgs/cpkgs/isis3/isis_data/kaguya/kernels/spk/SEL_M_071020_090610_SGMH_02.BSP
-/usgs/cpkgs/isis3/isis_data/kaguya/kernels/spk/SEL_MAIN_GRGM900C_L270_DIRALT_2019-02-13_TYPE13.bsp
 /usgs/cpkgs/isis3/isis_data/kaguya/kernels/tspk/de421.bsp
 /usgs/cpkgs/isis3/isis_data/kaguya/kernels/fk/SEL_V01.TF
 /usgs/cpkgs/isis3/isis_data/galileo/kernels/ck/ck92345a_plt.bc

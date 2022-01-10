@@ -14,7 +14,7 @@ using namespace SpiceQL;
 TEST_F(TestConfig, FunctionalTestConfigConstruct) {
   json megaConfig = testConfig.globalConf();
 
-  ASSERT_EQ(megaConfig.size(), 27);
+  ASSERT_EQ(megaConfig.size(), 28);
 }
 
 TEST_F(TestConfig, FunctionalTestConfigEval) {
