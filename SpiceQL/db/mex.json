@@ -33,12 +33,12 @@
         "iak" : {
             "kernels" : "hrscAddendum[0-9]{3}.ti"
         },
-        "dep" : "mex"
+        "deps" : "/mex"
     },
     "src" : {
         "iak" : {
             "kernels" : "hrscsrcAddendum[0-9]{3}.ti"
         },
-        "dep" : "mex"
+        "deps" : "/mex"
     }
 }
