@@ -54,6 +54,6 @@
       "iak": {
         "kernels": "tgoCassisAddendum[0-9]{3}.ti"
       },
-      "deps" : "tgo"     
+      "deps" : "/tgo"     
     }
   }
