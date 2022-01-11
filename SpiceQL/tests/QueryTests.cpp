@@ -466,3 +466,38 @@ TEST_F(IsisDataDirectory, FunctionalTestSearchMissionKernelsKaguya) {
               "SEL_M_071020_090610_SGMH_02.BSP"};
   CompareKernelSets(getKernelList(res.at("kaguya").at("spk").at("smithed")), expected); 
 }
+
+
+TEST_F(IsisDataDirectory, FunctionalTestSearchMissionKernelsTgo) {
+  fs::path dbPath = getMissionConfigFile("tgo");
+  
+  compareKernelSets("tgo");
+
+  ifstream i(dbPath);
+  nlohmann::json conf = nlohmann::json::parse(i);
+
+  MockRepository mocks;
+  mocks.OnCallFunc(ls).Return(files);
+
+  nlohmann::json res = searchMissionKernels("doesn't matter", conf);
+
+  set<string> kernels = getKernelSet(res);
+  set<string> mission = missionMap.at("tgo");
+  
+  vector<string> expected = {"em16_tgo_sc_fmp_026_01_20200321_20200418_f20180215_v01.bc"};
+  CompareKernelSets(getKernelList(res.at("tgo").at("ck").at("predicted")), expected); 
+
+  expected = {"em16_tgo_sc_ssm_20190210_20190303_s20190208_v01.bc"};
+  CompareKernelSets(getKernelList(res.at("tgo").at("ck").at("reconstructed")), expected); 
+
+  expected = {"em16_tgo_fap_167_01_20160314_20180203_v01.bsp"};
+  CompareKernelSets(getKernelList(res.at("tgo").at("spk").at("predicted")), expected); 
+
+  expected = {"em16_tgo_cassis_ipp_tel_20160407_20170309_s20170116_v01.bc"};
+  CompareKernelSets(getKernelList(res.at("cassis").at("ck").at("predicted")), expected); 
+
+  expected = {"cassis_ck_p_160312_181231_180609.bc",
+              "em16_tgo_cassis_tel_20160407_20201231_s20200803_v04.bc"};
+  CompareKernelSets(getKernelList(res.at("cassis").at("ck").at("reconstructed")), expected); 
+
+}
