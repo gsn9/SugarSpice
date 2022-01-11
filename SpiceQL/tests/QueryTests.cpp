@@ -441,3 +441,28 @@ TEST_F(IsisDataDirectory, FunctionalTestOdysseyConf) {
               "themis_dayir_merged_2018Jul13_spk.bsp"};
   CompareKernelSets(getKernelList(res.at("odyssey").at("spk").at("smithed")), expected);  
 }
+
+TEST_F(IsisDataDirectory, FunctionalTestSearchMissionKernelsKaguya) {
+  fs::path dbPath = getMissionConfigFile("kaguya");
+  
+  compareKernelSets("kaguya");
+
+  ifstream i(dbPath);
+  nlohmann::json conf = nlohmann::json::parse(i);
+
+  MockRepository mocks;
+  mocks.OnCallFunc(ls).Return(files);
+
+  nlohmann::json res = searchMissionKernels("doesn't matter", conf);
+
+  set<string> kernels = getKernelSet(res);
+  set<string> mission = missionMap.at("kaguya");
+  
+  vector<string> expected = {"SEL_M_ALL_D_V02.BC"};
+  CompareKernelSets(getKernelList(res.at("kaguya").at("ck").at("reconstructed")), expected); 
+
+  expected = {"SEL_M_071020_081226_SGMI_05.BSP",
+              "SELMAINGRGM900CL660DIRALT2008103020090610.bsp",
+              "SEL_M_071020_090610_SGMH_02.BSP"};
+  CompareKernelSets(getKernelList(res.at("kaguya").at("spk").at("smithed")), expected); 
+}
