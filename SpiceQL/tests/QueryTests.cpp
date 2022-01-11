@@ -466,3 +466,37 @@ TEST_F(IsisDataDirectory, FunctionalTestSearchMissionKernelsKaguya) {
               "SEL_M_071020_090610_SGMH_02.BSP"};
   CompareKernelSets(getKernelList(res.at("kaguya").at("spk").at("smithed")), expected); 
 }
+
+
+TEST_F(IsisDataDirectory, FunctionalTestSearchMissionKernelsMex) {
+ fs::path dbPath = getMissionConfigFile("mex");
+  
+  compareKernelSets("mex");
+
+  ifstream i(dbPath);
+  nlohmann::json conf = nlohmann::json::parse(i);
+
+  MockRepository mocks;
+  mocks.OnCallFunc(ls).Return(files);
+
+  nlohmann::json res = searchMissionKernels("doesn't matter", conf);
+
+  set<string> kernels = getKernelSet(res);
+  set<string> mission = missionMap.at("mex");
+  
+  vector<string> expected = {"ATNM_P060401000000_00780.BC"};
+  CompareKernelSets(getKernelList(res.at("mex").at("ck").at("predicted")), expected); 
+
+  expected = {"ATNM_MEASURED_030602_040101_V03.BC",
+              "ATNM_RECONSTITUTED_00004.BC"};
+  CompareKernelSets(getKernelList(res.at("mex").at("ck").at("reconstructed")), expected);
+
+  expected = {"ATNM_P060401000000_00780.BC"};
+  CompareKernelSets(getKernelList(res.at("mex").at("ck").at("predicted")), expected); 
+
+  expected = {"ORMF_______________00720.BSP"};
+  CompareKernelSets(getKernelList(res.at("mex").at("spk").at("predicted")), expected);
+
+  expected = {"ORHM_______________00038.BSP"};
+  CompareKernelSets(getKernelList(res.at("mex").at("spk").at("reconstructed")), expected);  
+}
