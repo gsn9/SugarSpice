@@ -472,7 +472,6 @@ TEST_F(IsisDataDirectory, FunctionalTestSearchMissionKernelsTgo) {
   fs::path dbPath = getMissionConfigFile("tgo");
   
   compareKernelSets("tgo");
-
   ifstream i(dbPath);
   nlohmann::json conf = nlohmann::json::parse(i);
 
@@ -482,6 +481,7 @@ TEST_F(IsisDataDirectory, FunctionalTestSearchMissionKernelsTgo) {
   nlohmann::json res = searchMissionKernels("doesn't matter", conf);
 
   set<string> kernels = getKernelSet(res);
+
   set<string> mission = missionMap.at("tgo");
   
   vector<string> expected = {"em16_tgo_sc_fmp_026_01_20200321_20200418_f20180215_v01.bc"};
@@ -499,5 +499,37 @@ TEST_F(IsisDataDirectory, FunctionalTestSearchMissionKernelsTgo) {
   expected = {"cassis_ck_p_160312_181231_180609.bc",
               "em16_tgo_cassis_tel_20160407_20201231_s20200803_v04.bc"};
   CompareKernelSets(getKernelList(res.at("cassis").at("ck").at("reconstructed")), expected); 
+}
 
+
+TEST_F(IsisDataDirectory, FunctionalTestSearchMissionKernelsMex) {
+  fs::path dbPath = getMissionConfigFile("mex");
+  
+  compareKernelSets("mex");
+
+  ifstream i(dbPath);
+  nlohmann::json conf = nlohmann::json::parse(i);
+
+  MockRepository mocks;
+  mocks.OnCallFunc(ls).Return(files);
+
+  nlohmann::json res = searchMissionKernels("doesn't matter", conf);
+
+  set<string> kernels = getKernelSet(res);set<string> mission = missionMap.at("mex");
+  
+  vector<string> expected = {"ATNM_P060401000000_00780.BC"};
+  CompareKernelSets(getKernelList(res.at("mex").at("ck").at("predicted")), expected); 
+
+  expected = {"ATNM_MEASURED_030602_040101_V03.BC",
+              "ATNM_RECONSTITUTED_00004.BC"};
+  CompareKernelSets(getKernelList(res.at("mex").at("ck").at("reconstructed")), expected);
+
+  expected = {"ATNM_P060401000000_00780.BC"};
+  CompareKernelSets(getKernelList(res.at("mex").at("ck").at("predicted")), expected); 
+
+  expected = {"ORMF_______________00720.BSP"};
+  CompareKernelSets(getKernelList(res.at("mex").at("spk").at("predicted")), expected);
+
+  expected = {"ORHM_______________00038.BSP"};
+  CompareKernelSets(getKernelList(res.at("mex").at("spk").at("reconstructed")), expected);  
 }

@@ -63,6 +63,7 @@ if(SPICEQL_BUILD_LIB)
                               ${CMAKE_CURRENT_SOURCE_DIR}/SpiceQL/db/mro.json
                               ${CMAKE_CURRENT_SOURCE_DIR}/SpiceQL/db/kaguya.json
                               ${CMAKE_CURRENT_SOURCE_DIR}/SpiceQL/db/tgo.json
+                              ${CMAKE_CURRENT_SOURCE_DIR}/SpiceQL/db/mex.json
                               ${CMAKE_CURRENT_SOURCE_DIR}/SpiceQL/db/viking1.json
                               ${CMAKE_CURRENT_SOURCE_DIR}/SpiceQL/db/viking2.json)
 
